@@ -114,12 +114,16 @@
 
 /* ===== PASOS DEL FORMULARIO ===== */
 .form-step {
-    display: none;
+    display: none !important;
     animation: fadeInRight 0.5s ease-out;
 }
 
 .form-step.active {
-    display: block;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
 }
 
 .step-title {
@@ -181,28 +185,37 @@
 
 /* ===== SELECCIÓN DE DOCTOR ===== */
 .doctor-selection {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    min-height: 300px;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap: 1.5rem !important;
+    min-height: 300px !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1 !important;
 }
 
 .doctor-card {
-    background: var(--white);
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 2rem;
-    cursor: pointer;
+    background: var(--white) !important;
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    cursor: pointer !important;
     transition: all 0.3s ease;
     display: flex !important;
-    align-items: center;
-    gap: 1.5rem;
+    align-items: center !important;
+    gap: 1.5rem !important;
     user-select: none;
-    position: relative;
+    position: relative !important;
     min-height: 120px !important;
     height: auto !important;
     opacity: 1 !important;
     visibility: visible !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    flex-direction: row !important;
+    overflow: visible !important;
 }
 
 .doctor-card::before {
@@ -261,6 +274,9 @@
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
+    flex: 1 !important;
+    position: relative !important;
+    z-index: 2 !important;
 }
 
 .doctor-info h4 {
