@@ -256,7 +256,16 @@ function loadDoctors() {
         return;
     }
     
-    console.log('✅ Contenedor encontrado:', doctorSelection);
+    // FORZAR estilos del contenedor
+    doctorSelection.style.display = 'grid';
+    doctorSelection.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
+    doctorSelection.style.gap = '1.5rem';
+    doctorSelection.style.minHeight = '300px';
+    doctorSelection.style.width = '100%';
+    doctorSelection.style.margin = '0';
+    doctorSelection.style.padding = '0';
+    
+    console.log('✅ Contenedor encontrado y estilos aplicados:', doctorSelection);
     
     // Obtener doctores para la especialidad seleccionada
     const doctors = doctorsDatabase[appointmentData.specialty] || [];
@@ -265,90 +274,151 @@ function loadDoctors() {
     
     if (doctors.length === 0) {
         doctorSelection.innerHTML = `
-            <p style="grid-column: 1/-1; text-align: center; color: #666;">
+            <p style="grid-column: 1/-1; text-align: center; color: #666; font-size: 1.2rem; padding: 2rem;">
                 No hay doctores disponibles para esta especialidad.
             </p>
         `;
         return;
     }
     
-    // Crear HTML con ESTILOS INLINE para garantizar visibilidad
-    let cardsHTML = '';
+    // Limpiar contenedor
+    doctorSelection.innerHTML = '';
+    
+    // Crear tarjetas DIRECTAMENTE en el DOM (no con innerHTML)
     doctors.forEach((doctor, index) => {
-        cardsHTML += `
-            <div class="doctor-card" 
-                 data-doctor-index="${index}" 
-                 onclick="handleDoctorClick(${index}); return false;"
-                 style="display: flex !important; 
-                        background: white; 
-                        border: 2px solid #e0e0e0; 
-                        border-radius: 12px; 
-                        padding: 2rem; 
-                        margin-bottom: 1rem; 
-                        cursor: pointer; 
-                        align-items: center; 
-                        gap: 1.5rem;
-                        min-height: 120px;
-                        opacity: 1;
-                        visibility: visible;
-                        transition: all 0.3s ease;">
-                <div class="doctor-photo" 
-                     style="width: 80px; 
-                            height: 80px; 
-                            border-radius: 50%; 
-                            background: linear-gradient(135deg, #3da672, #2d8659); 
-                            display: flex; 
-                            align-items: center; 
-                            justify-content: center; 
-                            font-size: 2rem;
-                            flex-shrink: 0;">
-                    ${doctor.photo}
-                </div>
-                <div class="doctor-info" style="flex: 1;">
-                    <h4 style="color: #2d8659; 
-                               font-size: 1.2rem; 
-                               margin: 0 0 0.5rem 0; 
-                               font-weight: 700;">
-                        ${doctor.name}
-                    </h4>
-                    <span class="specialty-badge" 
-                          style="display: inline-block; 
-                                 background: #d4af37; 
-                                 color: #1e5f42; 
-                                 padding: 0.2rem 0.8rem; 
-                                 border-radius: 20px; 
-                                 font-size: 0.8rem; 
-                                 font-weight: 600;
-                                 margin-bottom: 0.5rem;">
-                        ${doctor.specialty}
-                    </span>
-                    <p style="margin: 0.5rem 0; 
-                              color: #666; 
-                              font-size: 0.9rem;">
-                        📚 ${doctor.experience}
-                    </p>
-                    <div class="doctor-rating" 
-                         style="color: #d4af37; 
-                                font-size: 0.9rem; 
-                                margin-top: 0.5rem;">
-                        ${doctor.rating}
-                    </div>
-                </div>
-            </div>
+        // Crear tarjeta principal
+        const card = document.createElement('div');
+        card.className = 'doctor-card';
+        card.setAttribute('data-doctor-index', index);
+        card.onclick = function() { handleDoctorClick(index); return false; };
+        
+        // ESTILOS INLINE COMPLETOS
+        card.style.cssText = `
+            display: flex !important;
+            background: white !important;
+            border: 2px solid #e0e0e0 !important;
+            border-radius: 12px !important;
+            padding: 2rem !important;
+            margin-bottom: 1rem !important;
+            cursor: pointer !important;
+            align-items: center !important;
+            gap: 1.5rem !important;
+            min-height: 140px !important;
+            height: auto !important;
+            width: 100% !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transition: all 0.3s ease !important;
+            box-sizing: border-box !important;
+            overflow: visible !important;
+            position: relative !important;
         `;
-        console.log(`✅ Doctor ${index + 1} preparado: ${doctor.name}`);
+        
+        // Crear foto
+        const photo = document.createElement('div');
+        photo.className = 'doctor-photo';
+        photo.textContent = doctor.photo;
+        photo.style.cssText = `
+            width: 80px !important;
+            height: 80px !important;
+            min-width: 80px !important;
+            min-height: 80px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #3da672, #2d8659) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 2.5rem !important;
+            flex-shrink: 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        `;
+        
+        // Crear contenedor de info
+        const info = document.createElement('div');
+        info.className = 'doctor-info';
+        info.style.cssText = `
+            flex: 1 !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        `;
+        
+        // Crear nombre
+        const name = document.createElement('h4');
+        name.textContent = doctor.name;
+        name.style.cssText = `
+            color: #2d8659 !important;
+            font-size: 1.3rem !important;
+            margin: 0 0 0.5rem 0 !important;
+            font-weight: 700 !important;
+            display: block !important;
+            line-height: 1.4 !important;
+        `;
+        
+        // Crear badge
+        const badge = document.createElement('span');
+        badge.className = 'specialty-badge';
+        badge.textContent = doctor.specialty;
+        badge.style.cssText = `
+            display: inline-block !important;
+            background: #d4af37 !important;
+            color: #1e5f42 !important;
+            padding: 0.3rem 1rem !important;
+            border-radius: 20px !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 0.5rem !important;
+        `;
+        
+        // Crear experiencia
+        const experience = document.createElement('p');
+        experience.textContent = `📚 ${doctor.experience}`;
+        experience.style.cssText = `
+            margin: 0.5rem 0 !important;
+            color: #666 !important;
+            font-size: 1rem !important;
+            display: block !important;
+            line-height: 1.5 !important;
+        `;
+        
+        // Crear rating
+        const rating = document.createElement('div');
+        rating.className = 'doctor-rating';
+        rating.textContent = doctor.rating;
+        rating.style.cssText = `
+            color: #d4af37 !important;
+            font-size: 1rem !important;
+            margin-top: 0.5rem !important;
+            display: block !important;
+        `;
+        
+        // Ensamblar estructura
+        info.appendChild(name);
+        info.appendChild(badge);
+        info.appendChild(experience);
+        info.appendChild(rating);
+        
+        card.appendChild(photo);
+        card.appendChild(info);
+        
+        // Agregar al contenedor
+        doctorSelection.appendChild(card);
+        
+        console.log(`✅ Doctor ${index + 1} creado: ${doctor.name}`);
+        console.log(`   Card height:`, card.offsetHeight, 'px');
     });
     
-    // Insertar todo el HTML de una vez
-    doctorSelection.innerHTML = cardsHTML;
+    console.log('✅ Todos los doctores insertados en el DOM');
     
-    console.log('✅ HTML insertado en el DOM');
-    console.log('✅ Todos los doctores cargados correctamente');
-    
-    // Agregar efecto hover con JavaScript
+    // Agregar efectos hover
     setTimeout(() => {
-        const cards = document.querySelectorAll('.doctor-card');
-        cards.forEach(card => {
+        const cards = doctorSelection.querySelectorAll('.doctor-card');
+        console.log(`🔍 Cards después de inserción:`, cards.length);
+        
+        cards.forEach((card, i) => {
+            console.log(`   Card ${i + 1} - Height: ${card.offsetHeight}px, Display: ${window.getComputedStyle(card).display}`);
+            
             card.addEventListener('mouseenter', function() {
                 this.style.borderColor = '#3da672';
                 this.style.transform = 'translateY(-5px)';
@@ -363,22 +433,27 @@ function loadDoctors() {
                 }
             });
         });
-    }, 100);
-    
-    // Verificar que se insertaron
-    setTimeout(() => {
-        const loadedCards = document.querySelectorAll('.doctor-card');
-        console.log(`🔍 Verificación: ${loadedCards.length} tarjetas de doctores visibles en el DOM`);
         
-        if (loadedCards.length > 0) {
-            console.log('✅ Las tarjetas están en el DOM');
-            console.log('✅ Primera tarjeta:', loadedCards[0]);
-            console.log('✅ Primera tarjeta visible:', loadedCards[0].offsetHeight > 0);
-            console.log('✅ Primera tarjeta height:', loadedCards[0].offsetHeight, 'px');
+        // Verificación final
+        console.log('═══════════════════════════════════');
+        console.log('🔍 VERIFICACIÓN FINAL DE VISIBILIDAD:');
+        console.log('Contenedor height:', doctorSelection.offsetHeight, 'px');
+        console.log('Contenedor display:', window.getComputedStyle(doctorSelection).display);
+        console.log('Total de tarjetas:', cards.length);
+        
+        const allVisible = Array.from(cards).every(c => c.offsetHeight > 0);
+        if (allVisible) {
+            console.log('✅ ¡TODAS LAS TARJETAS SON VISIBLES!');
         } else {
-            console.error('❌ ERROR: Las tarjetas NO están en el DOM');
+            console.log('❌ ALGUNAS TARJETAS NO SON VISIBLES');
+            cards.forEach((c, i) => {
+                if (c.offsetHeight === 0) {
+                    console.log(`   ❌ Card ${i + 1} tiene height 0`);
+                }
+            });
         }
-    }, 100);
+        console.log('═══════════════════════════════════');
+    }, 200);
 }
 
 // Función global para manejar clicks (llamada desde onclick)
@@ -1115,3 +1190,125 @@ window.debugDoctors = function() {
 };
 
 console.log('💡 NUEVO: Escribe debugDoctors() para ver el HTML completo');
+
+// ===== FUNCIÓN DE DIAGNÓSTICO COMPLETO =====
+window.diagnosticoCompleto = function() {
+    console.log('🔬 ═══════════════════════════════════════════════');
+    console.log('🔬 DIAGNÓSTICO COMPLETO DEL SISTEMA');
+    console.log('🔬 ═══════════════════════════════════════════════');
+    console.log('');
+    
+    // 1. Verificar paso actual
+    console.log('1️⃣ PASO ACTUAL:');
+    const activeStep = document.querySelector('.form-step.active');
+    console.log('   Paso activo:', activeStep ? activeStep.dataset.step : 'NINGUNO');
+    console.log('');
+    
+    // 2. Verificar contenedor
+    console.log('2️⃣ CONTENEDOR:');
+    const container = document.getElementById('doctorSelection');
+    if (container) {
+        console.log('   ✅ Existe');
+        console.log('   Display:', window.getComputedStyle(container).display);
+        console.log('   Width:', container.offsetWidth, 'px');
+        console.log('   Height:', container.offsetHeight, 'px');
+        console.log('   Visible:', container.offsetHeight > 0);
+    } else {
+        console.log('   ❌ NO EXISTE');
+    }
+    console.log('');
+    
+    // 3. Verificar especialidad
+    console.log('3️⃣ ESPECIALIDAD:');
+    console.log('   Código:', appointmentData.specialty || 'NINGUNA');
+    console.log('   Nombre:', appointmentData.specialtyName || 'NINGUNA');
+    console.log('');
+    
+    // 4. Verificar doctores en BD
+    console.log('4️⃣ BASE DE DATOS:');
+    if (appointmentData.specialty) {
+        const docs = doctorsDatabase[appointmentData.specialty];
+        console.log('   Doctores disponibles:', docs ? docs.length : 0);
+        if (docs) {
+            docs.forEach((d, i) => console.log(`      ${i + 1}. ${d.name}`));
+        }
+    } else {
+        console.log('   ⚠️ No hay especialidad seleccionada');
+    }
+    console.log('');
+    
+    // 5. Verificar tarjetas en DOM
+    console.log('5️⃣ TARJETAS EN DOM:');
+    const cards = document.querySelectorAll('.doctor-card');
+    console.log('   Total encontradas:', cards.length);
+    if (cards.length > 0) {
+        cards.forEach((card, i) => {
+            const height = card.offsetHeight;
+            const display = window.getComputedStyle(card).display;
+            const visibility = window.getComputedStyle(card).visibility;
+            const opacity = window.getComputedStyle(card).opacity;
+            
+            console.log(`   Card ${i + 1}:`);
+            console.log(`      Height: ${height}px ${height > 0 ? '✅' : '❌'}`);
+            console.log(`      Display: ${display}`);
+            console.log(`      Visibility: ${visibility}`);
+            console.log(`      Opacity: ${opacity}`);
+        });
+    } else {
+        console.log('   ❌ NO HAY TARJETAS');
+    }
+    console.log('');
+    
+    // 6. Verificar archivos CSS cargados
+    console.log('6️⃣ ARCHIVOS CSS:');
+    const sheets = Array.from(document.styleSheets);
+    sheets.forEach((sheet, i) => {
+        try {
+            console.log(`   ${i + 1}. ${sheet.href || 'Inline CSS'}`);
+        } catch (e) {
+            console.log(`   ${i + 1}. [CORS blocked]`);
+        }
+    });
+    console.log('');
+    
+    // 7. Verificar archivos JS cargados
+    console.log('7️⃣ ARCHIVOS JAVASCRIPT:');
+    const scripts = Array.from(document.querySelectorAll('script[src]'));
+    scripts.forEach((script, i) => {
+        console.log(`   ${i + 1}. ${script.src}`);
+    });
+    console.log('');
+    
+    // 8. Test visual
+    console.log('8️⃣ TEST VISUAL:');
+    if (container && cards.length === 0) {
+        console.log('   ⚠️ Contenedor existe pero NO hay tarjetas');
+        console.log('   💡 Solución: Ejecuta loadDoctors()');
+    } else if (container && cards.length > 0) {
+        const allVisible = Array.from(cards).every(c => c.offsetHeight > 0);
+        if (allVisible) {
+            console.log('   ✅ TODAS las tarjetas deberían ser VISIBLES');
+        } else {
+            console.log('   ❌ PROBLEMA: Hay tarjetas con height 0');
+            console.log('   💡 Las tarjetas están en el DOM pero colapsadas');
+        }
+    }
+    console.log('');
+    
+    console.log('🔬 ═══════════════════════════════════════════════');
+    console.log('🔬 FIN DEL DIAGNÓSTICO');
+    console.log('🔬 ═══════════════════════════════════════════════');
+    console.log('');
+    console.log('💡 COMANDOS DISPONIBLES:');
+    console.log('   loadDoctors()          - Recargar doctores');
+    console.log('   testDoctorClick()      - Probar selección');
+    console.log('   diagnosticoCompleto()  - Este diagnóstico');
+    console.log('');
+};
+
+console.log('');
+console.log('═══════════════════════════════════════════════════════');
+console.log('💡 NUEVO COMANDO: diagnosticoCompleto()');
+console.log('   Ejecuta un análisis completo del sistema');
+console.log('═══════════════════════════════════════════════════════');
+console.log('');
