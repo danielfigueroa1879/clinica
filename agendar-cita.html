@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Agende su hora médica en la Clínica de Carabineros">
+    <title>Agendar Cita - Clínica de Carabineros</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="agendar-cita.css">
+</head>
+<body>
+    <!-- Header Top -->
+    <div class="header-top">
+        <div class="header-top-content">
+            <div class="contact-info">
+                <div class="contact-item">📞 (56) 2 2927 1000</div>
+                <div class="contact-item">📧 contacto@clinicacarabineros.cl</div>
+            </div>
+            <div class="emergency-number">
+                🚨 EMERGENCIAS: 133
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <span>⚕️</span>
+                </div>
+                <div class="clinic-title">
+                    <h1>Clínica de Carabineros</h1>
+                    <p>SALUD AL SERVICIO DE CHILE</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#especialidades">Especialidades</a></li>
+                    <li><a href="index.html#horarios">Horarios</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                    <li><a href="agendar-cita.html" class="active">Agendar Cita</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Pequeño -->
+    <section class="hero-small">
+        <div class="hero-content">
+            <h2>Agendar Cita Médica</h2>
+            <p>Reserve su atención de forma rápida y segura</p>
+        </div>
+    </section>
+
+    <!-- Sistema de Agendamiento -->
+    <section class="appointment-section">
+        <div class="appointment-container">
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Especialidad</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Doctor</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Fecha y Hora</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Datos Personales</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Confirmación</div>
+                </div>
+            </div>
+
+            <!-- Formulario Multi-paso -->
+            <form id="appointmentForm" class="appointment-form">
+                
+                <!-- Paso 1: Selección de Especialidad -->
+                <div class="form-step active" data-step="1">
+                    <h3 class="step-title">Seleccione la Especialidad</h3>
+                    <div class="specialty-selection">
+                        <div class="specialty-option" data-specialty="odontologia-adultos">
+                            <div class="specialty-icon">🦷</div>
+                            <h4>Odontología Adultos</h4>
+                            <p>Atención dental para adultos</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="odontologia-ninos">
+                            <div class="specialty-icon">👶</div>
+                            <h4>Odontología Infantil</h4>
+                            <p>Atención dental pediátrica</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="medicina-general">
+                            <div class="specialty-icon">🏥</div>
+                            <h4>Medicina General</h4>
+                            <p>Consulta médica general</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="kinesiologia">
+                            <div class="specialty-icon">🏃</div>
+                            <h4>Kinesiología</h4>
+                            <p>Rehabilitación física</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="psicologia">
+                            <div class="specialty-icon">🧠</div>
+                            <h4>Psicología</h4>
+                            <p>Atención psicológica</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="nutricion">
+                            <div class="specialty-icon">🥗</div>
+                            <h4>Nutrición</h4>
+                            <p>Asesoría nutricional</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="traumatologia">
+                            <div class="specialty-icon">🦴</div>
+                            <h4>Traumatología</h4>
+                            <p>Lesiones y fracturas</p>
+                        </div>
+                        <div class="specialty-option" data-specialty="medicina-laboral">
+                            <div class="specialty-icon">👔</div>
+                            <h4>Medicina Laboral</h4>
+                            <p>Evaluaciones ocupacionales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paso 2: Selección de Doctor -->
+                <div class="form-step" data-step="2">
+                    <h3 class="step-title">Seleccione un Profesional</h3>
+                    <div id="doctorSelection" class="doctor-selection">
+                        <!-- Los doctores se cargarán dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Paso 3: Selección de Fecha y Hora -->
+                <div class="form-step" data-step="3">
+                    <h3 class="step-title">Seleccione Fecha y Hora</h3>
+                    <div class="datetime-selection">
+                        <div class="calendar-container">
+                            <h4>Seleccione una Fecha</h4>
+                            <input type="date" id="appointmentDate" class="date-input" required>
+                        </div>
+                        <div class="time-container">
+                            <h4>Horarios Disponibles</h4>
+                            <div id="timeSlots" class="time-slots">
+                                <!-- Los horarios se cargarán dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paso 4: Datos Personales -->
+                <div class="form-step" data-step="4">
+                    <h3 class="step-title">Complete sus Datos Personales</h3>
+                    <div class="personal-data-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientName">Nombre Completo *</label>
+                                <input type="text" id="patientName" name="patientName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientRut">RUT *</label>
+                                <input type="text" id="patientRut" name="patientRut" placeholder="12.345.678-9" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientEmail">Correo Electrónico *</label>
+                                <input type="email" id="patientEmail" name="patientEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientPhone">Teléfono *</label>
+                                <input type="tel" id="patientPhone" name="patientPhone" placeholder="+56 9 1234 5678" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patientBirthdate">Fecha de Nacimiento *</label>
+                                <input type="date" id="patientBirthdate" name="patientBirthdate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientGender">Género *</label>
+                                <select id="patientGender" name="patientGender" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="masculino">Masculino</option>
+                                    <option value="femenino">Femenino</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="patientNotes">Motivo de Consulta (Opcional)</label>
+                            <textarea id="patientNotes" name="patientNotes" rows="4" placeholder="Describa brevemente el motivo de su consulta..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paso 5: Confirmación -->
+                <div class="form-step" data-step="5">
+                    <h3 class="step-title">Confirmación de Cita</h3>
+                    <div id="appointmentSummary" class="appointment-summary">
+                        <!-- El resumen se cargará dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Botones de Navegación -->
+                <div class="form-navigation">
+                    <button type="button" id="prevBtn" class="nav-btn btn-secondary" style="display: none;">
+                        ← Anterior
+                    </button>
+                    <button type="button" id="nextBtn" class="nav-btn btn-primary">
+                        Siguiente →
+                    </button>
+                    <button type="submit" id="submitBtn" class="nav-btn btn-success" style="display: none;">
+                        Confirmar Cita ✓
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <!-- Modal de Voucher -->
+    <div id="voucherModal" class="modal">
+        <div class="modal-content voucher-content">
+            <div id="voucherContainer">
+                <!-- El voucher se generará aquí -->
+            </div>
+            <div class="modal-actions">
+                <button onclick="printVoucher()" class="btn-primary">🖨️ Imprimir Voucher</button>
+                <button onclick="downloadVoucher()" class="btn-primary">📥 Descargar PDF</button>
+                <button onclick="closeVoucherModal()" class="btn-secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Clínica de Carabineros</h4>
+                <p>Comprometidos con la salud y bienestar de quienes protegen a Chile.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.html#especialidades">Especialidades</a></li>
+                    <li><a href="index.html#horarios">Horarios</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Servicios</h4>
+                <ul>
+                    <li><a href="agendar-cita.html">Agendar Hora</a></li>
+                    <li><a href="#">Resultados de Exámenes</a></li>
+                    <li><a href="#">Telemedicina</a></li>
+                    <li><a href="#">Convenios</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📞 (56) 2 2927 1000</li>
+                    <li>📧 contacto@clinicacarabineros.cl</li>
+                    <li>📍 Av. Libertador B. O'Higgins 1234</li>
+                    <li>🚨 Emergencias: 133</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Clínica de Carabineros de Chile. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script src="agendar-cita.js"></script>
+</body>
+</html>
