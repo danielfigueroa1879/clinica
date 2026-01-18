@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamiento de Citas Médicas</title>
+    <title>Sistema de Agendamiento - Clínica Médica</title>
     <style>
         * {
             margin: 0;
@@ -12,67 +12,119 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2d7a4a 0%, #4a9d68 100%);
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 20px;
+            color: #333;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
+            z-index: 999;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .home-button:hover {
+            background: #1b4332;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(45, 106, 79, 0.15);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #1e5233 0%, #2d7a4a 100%);
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 50px 40px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
         }
 
         .content {
-            padding: 40px 30px;
+            padding: 50px 40px;
         }
 
         .step-indicator {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 40px;
-            gap: 10px;
+            margin-bottom: 50px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .step {
             flex: 1;
+            min-width: 110px;
             text-align: center;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px 15px;
+            border-radius: 10px;
             background: #f5f5f5;
             font-weight: 600;
-            color: #666;
+            color: #888;
+            transition: all 0.3s ease;
+            border: 2px solid #ddd;
         }
 
         .step.active {
-            background: #2d7a4a;
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
             color: white;
+            border-color: #2d6a4f;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(45, 106, 79, 0.3);
         }
 
         .step.completed {
-            background: #27ae60;
+            background: #52b788;
             color: white;
+            border-color: #52b788;
         }
 
         .form-section {
@@ -81,177 +133,261 @@
 
         .form-section.visible {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.4s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-title {
-            font-size: 1.8rem;
-            color: #2d7a4a;
-            margin-bottom: 30px;
+            font-size: 2.2rem;
+            color: #2d6a4f;
+            margin-bottom: 40px;
             text-align: center;
+            font-weight: 700;
         }
 
+        /* ===== GRID PARA ESPECIALIDADES ===== */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
+            width: 100%;
         }
 
+        /* ===== CARD ESPECIALIDAD ===== */
         .card {
-            padding: 20px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            padding: 25px 20px;
+            border: 2px solid #d4d4d4;
+            border-radius: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .card:hover {
-            border-color: #2d7a4a;
-            box-shadow: 0 4px 12px rgba(45, 122, 74, 0.2);
-            transform: translateY(-2px);
+            border-color: #2d6a4f;
+            box-shadow: 0 8px 20px rgba(45, 106, 79, 0.15);
+            transform: translateY(-5px);
         }
 
         .card.selected {
             background: #e8f5e9;
-            border-color: #2d7a4a;
+            border-color: #2d6a4f;
             border-width: 3px;
-            box-shadow: 0 0 0 3px rgba(45, 122, 74, 0.1);
+            box-shadow: 0 8px 25px rgba(45, 106, 79, 0.2);
         }
 
         .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            margin-bottom: 12px;
             display: block;
         }
 
         .card-title {
-            font-weight: 600;
+            font-weight: 700;
             color: #333;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.3;
         }
 
-        .card-subtitle {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 5px;
-        }
-
+        /* ===== GRID PARA DOCTORES ===== */
         .doctors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-bottom: 30px;
+            width: 100%;
         }
 
+        /* ===== DOCTOR CARD PROFESIONAL ===== */
         .doctor-card {
-            padding: 25px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            padding: 0;
+            border: 1px solid #d4d4d4;
+            border-radius: 14px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             background: white;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            min-height: 380px;
         }
 
         .doctor-card:hover {
-            border-color: #2d7a4a;
-            box-shadow: 0 6px 20px rgba(45, 122, 74, 0.2);
-            transform: translateY(-3px);
+            border-color: #2d6a4f;
+            box-shadow: 0 12px 35px rgba(45, 106, 79, 0.2);
+            transform: translateY(-8px);
         }
 
         .doctor-card.selected {
             background: #e8f5e9;
-            border-color: #2d7a4a;
-            border-width: 3px;
-            box-shadow: 0 0 0 4px rgba(45, 122, 74, 0.15);
+            border-color: #2d6a4f;
+            border-width: 2px;
+            box-shadow: 0 12px 40px rgba(45, 106, 79, 0.25);
+        }
+
+        .doctor-header {
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+            color: white;
+            padding: 30px 20px;
+            position: relative;
         }
 
         .doctor-avatar {
-            font-size: 3rem;
+            font-size: 4rem;
             margin-bottom: 15px;
+            display: block;
         }
 
         .doctor-name {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: #2d7a4a;
             margin-bottom: 8px;
+            color: white;
+        }
+
+        .doctor-title {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .doctor-body {
+            padding: 25px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .doctor-specialty {
-            font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 5px;
+            font-size: 1rem;
+            color: #2d6a4f;
+            margin-bottom: 12px;
+            font-weight: 600;
+            padding: 8px;
+            background: #e8f5e9;
+            border-radius: 6px;
         }
 
-        .doctor-experience {
+        .doctor-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             font-size: 0.9rem;
-            color: #999;
-            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .info-icon {
+            font-size: 1.1rem;
         }
 
         .doctor-rating {
-            color: #f39c12;
+            color: #d4a574;
             font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
+        .doctor-badge {
+            display: inline-block;
+            background: #52b788;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0 4px 8px 0;
+        }
+
+        .doctor-availability {
+            font-size: 0.85rem;
+            color: #52b788;
+            font-weight: 600;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* ===== FORMULARIO ===== */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #333;
+            color: #2d6a4f;
+            font-size: 1rem;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
+            padding: 14px 16px;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
             font-size: 1rem;
             font-family: inherit;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background: white;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #2d7a4a;
-            box-shadow: 0 0 0 3px rgba(45, 122, 74, 0.1);
+            border-color: #2d6a4f;
+            box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
+            background: #f9fdf9;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
         }
 
+        /* ===== RESUMEN ===== */
         .summary {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 8px;
-            border-left: 4px solid #2d7a4a;
+            background: linear-gradient(135deg, #f9fdf9 0%, #f0f8f0 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid #2d6a4f;
         }
 
         .summary-item {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
+            padding: 16px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1rem;
         }
 
         .summary-item:last-child {
@@ -259,62 +395,71 @@
         }
 
         .summary-label {
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: #2d6a4f;
         }
 
         .summary-value {
-            color: #666;
+            color: #333;
+            text-align: right;
         }
 
+        /* ===== BOTONES ===== */
         .buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
-            margin-top: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 12px 30px;
+            padding: 15px 40px;
             border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-width: 150px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary {
-            background: #2d7a4a;
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
         }
 
         .btn-primary:hover {
-            background: #1e5233;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(45, 122, 74, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(45, 106, 79, 0.4);
         }
 
         .btn-secondary {
-            background: #ddd;
-            color: #333;
+            background: #c8e6c9;
+            color: #1b4332;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .btn-secondary:hover {
-            background: #ccc;
+            background: #a5d6a7;
+            transform: translateY(-2px);
         }
 
         .btn-success {
-            background: #27ae60;
+            background: linear-gradient(135deg, #52b788 0%, #2d6a4f 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(82, 183, 136, 0.3);
         }
 
         .btn-success:hover {
-            background: #229954;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(82, 183, 136, 0.4);
         }
 
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -322,10 +467,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(27, 67, 50, 0.6);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal.show {
@@ -334,70 +480,125 @@
 
         .modal-content {
             background: white;
-            padding: 40px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
+            padding: 50px 40px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-content h2 {
-            color: #27ae60;
+            color: #2d6a4f;
             margin-bottom: 20px;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            font-weight: 700;
         }
 
         .modal-content p {
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.6;
+            color: #555;
+            margin-bottom: 12px;
+            line-height: 1.8;
+            font-size: 1.05rem;
         }
 
-        .footer {
-            background: #f5f5f5;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            min-width: 150px;
         }
 
         @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
+            .home-button {
+                position: static;
+                display: block;
+                width: 100%;
+                margin-bottom: 20px;
             }
 
-            .grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            .content {
+                padding: 30px 20px;
             }
 
-            .doctors-grid {
-                grid-template-columns: 1fr;
+            .header {
+                padding: 40px 20px;
             }
 
             .header h1 {
                 font-size: 2rem;
             }
 
-            .content {
-                padding: 20px;
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+                gap: 15px;
+            }
+
+            .doctors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .step-indicator {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .step {
+                min-width: unset;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Botón de Inicio (Visible siempre) -->
+    <a href="index.html" class="home-button">🏠 Volver a Inicio</a>
+
     <div class="container">
         <div class="header">
             <h1>🏥 Clínica Médica</h1>
-            <p>Sistema de Agendamiento de Citas</p>
+            <p>Sistema de Agendamiento de Citas Médicas</p>
         </div>
 
         <div class="content">
             <!-- Indicadores de Pasos -->
             <div class="step-indicator">
                 <div class="step active" data-step="1">1. Especialidad</div>
-                <div class="step" data-step="2">2. Doctor</div>
-                <div class="step" data-step="3">3. Fecha y Hora</div>
+                <div class="step" data-step="2">2. Profesional</div>
+                <div class="step" data-step="3">3. Fecha/Hora</div>
                 <div class="step" data-step="4">4. Datos</div>
                 <div class="step" data-step="5">5. Confirmar</div>
             </div>
@@ -422,11 +623,11 @@
             <div class="form-section" id="step-3">
                 <h2 class="section-title">Seleccione Fecha y Hora</h2>
                 <div class="form-group">
-                    <label for="appointment-date">Fecha:</label>
+                    <label for="appointment-date">📅 Fecha de la Cita:</label>
                     <input type="date" id="appointment-date" required>
                 </div>
                 <div class="form-group">
-                    <label>Horarios Disponibles:</label>
+                    <label>⏰ Horarios Disponibles:</label>
                     <div class="grid" id="times-container">
                         <!-- Los horarios se cargarán aquí -->
                     </div>
@@ -435,45 +636,45 @@
 
             <!-- PASO 4: Datos Personales -->
             <div class="form-section" id="step-4">
-                <h2 class="section-title">Datos Personales</h2>
+                <h2 class="section-title">Datos del Paciente</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="full-name">Nombre Completo:</label>
-                        <input type="text" id="full-name" required>
+                        <label for="full-name">Nombre Completo *</label>
+                        <input type="text" id="full-name" placeholder="Ej: Juan Pérez García" required>
                     </div>
                     <div class="form-group">
-                        <label for="rut">RUT:</label>
+                        <label for="rut">RUT *</label>
                         <input type="text" id="rut" placeholder="12.345.678-9" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" required>
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" placeholder="correo@ejemplo.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Teléfono:</label>
-                        <input type="tel" id="phone" required>
+                        <label for="phone">Teléfono *</label>
+                        <input type="tel" id="phone" placeholder="+56 9 1234 5678" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="birthdate">Fecha de Nacimiento:</label>
+                        <label for="birthdate">Fecha de Nacimiento *</label>
                         <input type="date" id="birthdate" required>
                     </div>
                     <div class="form-group">
-                        <label for="gender">Género:</label>
+                        <label for="gender">Género *</label>
                         <select id="gender" required>
                             <option value="">Seleccione...</option>
-                            <option value="masculino">Masculino</option>
-                            <option value="femenino">Femenino</option>
-                            <option value="otro">Otro</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="O">Otro</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="reason">Motivo de Consulta:</label>
-                    <textarea id="reason" rows="4" placeholder="Describa brevemente..."></textarea>
+                    <label for="reason">Motivo de la Consulta</label>
+                    <textarea id="reason" rows="4" placeholder="Describa brevemente el motivo de su visita..."></textarea>
                 </div>
             </div>
 
@@ -481,29 +682,31 @@
             <div class="form-section" id="step-5">
                 <h2 class="section-title">Confirmación de Cita</h2>
                 <div class="summary" id="summary-container">
-                    <!-- El resumen se cargará aquí -->
+                    <!-- El resumen se mostrará aquí -->
                 </div>
             </div>
 
             <!-- Botones de Navegación -->
             <div class="buttons">
-                <button class="btn-secondary" id="btn-prev" onclick="previousStep()" style="display: none;">← Anterior</button>
+                <button class="btn-secondary" id="btn-prev" style="display:none;" onclick="previousStep()">← Anterior</button>
                 <button class="btn-primary" id="btn-next" onclick="nextStep()">Siguiente →</button>
-                <button class="btn-success" id="btn-submit" onclick="submitAppointment()" style="display: none;">Confirmar Cita ✓</button>
+                <button class="btn-success" id="btn-submit" style="display:none;" onclick="submitAppointment()">✓ Confirmar Cita</button>
             </div>
-        </div>
-
-        <div class="footer">
-            <p>&copy; 2025 Clínica Médica. Todos los derechos reservados.</p>
         </div>
     </div>
 
     <!-- Modal de Éxito -->
     <div class="modal" id="success-modal">
         <div class="modal-content">
+            <span class="success-icon">✅</span>
             <h2>¡Cita Agendada Exitosamente!</h2>
             <p id="modal-message"></p>
-            <button class="btn-primary" onclick="location.reload()">Agendar Otra Cita</button>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="resetForm()">Agendar Otra Cita</button>
+                <a href="index.html" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                    <button class="btn-secondary" style="width: 100%; margin: 0;">Volver a Inicio</button>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -513,7 +716,7 @@
             { id: 'odontologia-adultos', name: 'Odontología Adultos', icon: '🦷' },
             { id: 'odontologia-ninos', name: 'Odontología Infantil', icon: '👶' },
             { id: 'medicina-general', name: 'Medicina General', icon: '🏥' },
-            { id: 'kinesiologia', name: 'Kinesiología', icon: '🏃' },
+            { id: 'kinesiologia', name: 'Kinesiología', icon: '💪' },
             { id: 'psicologia', name: 'Psicología', icon: '🧠' },
             { id: 'nutricion', name: 'Nutrición', icon: '🥗' },
             { id: 'traumatologia', name: 'Traumatología', icon: '🦴' },
@@ -522,36 +725,53 @@
 
         const doctors = {
             'odontologia-adultos': [
-                { name: 'Dr. Carlos Mendoza', specialty: 'Odontólogo General', experience: '15 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Dra. María González', specialty: 'Periodoncista', experience: '12 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Dr. Roberto Sánchez', specialty: 'Endodoncista', experience: '10 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Dr. Carlos Mendoza', specialty: 'Odontólogo General', experience: '15 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Senior', certification: 'Certificado' },
+                { name: 'Dra. María González', specialty: 'Periodoncista', experience: '12 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista en Periodontología', certification: 'Certificado' },
+                { name: 'Dr. Roberto Sánchez', specialty: 'Endodoncista', experience: '10 años', rating: '⭐⭐⭐⭐', title: 'Especialista en Endodoncia', certification: 'Certificado' },
+                { name: 'Dra. Francisca López', specialty: 'Ortodoncista', experience: '11 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista en Ortodoncia', certification: 'Certificado' },
+                { name: 'Dr. Javier Ruiz', specialty: 'Implantólogo', experience: '13 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista en Implantes', certification: 'Certificado' },
+                { name: 'Dra. Carmen Díaz', specialty: 'Odontóloga Estética', experience: '9 años', rating: '⭐⭐⭐⭐', title: 'Especialista en Odontología Estética', certification: 'Certificado' }
             ],
             'odontologia-ninos': [
-                { name: 'Dra. Patricia Valenzuela', specialty: 'Odontopediatra', experience: '18 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Dra. Andrea Rojas', specialty: 'Odontopediatra', experience: '8 años', rating: '⭐⭐⭐⭐⭐' }
+                { name: 'Dra. Patricia Valenzuela', specialty: 'Odontopediatra', experience: '18 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Senior Infantil', certification: 'Certificado' },
+                { name: 'Dra. Andrea Rojas', specialty: 'Odontopediatra', experience: '8 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Infantil', certification: 'Certificado' },
+                { name: 'Dra. Sofía Campos', specialty: 'Odontopediatra', experience: '6 años', rating: '⭐⭐⭐⭐', title: 'Especialista Pediátrica', certification: 'Certificado' },
+                { name: 'Dr. Miguel Herrera', specialty: 'Odontopediatra', experience: '7 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Infantil', certification: 'Certificado' }
             ],
             'medicina-general': [
-                { name: 'Dr. Juan Pablo Martínez', specialty: 'Médico General', experience: '20 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Dra. Claudia Fernández', specialty: 'Médico Internista', experience: '14 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Dr. Juan Pablo Martínez', specialty: 'Médico General', experience: '20 años', rating: '⭐⭐⭐⭐⭐', title: 'Médico General Consultor', certification: 'Certificado' },
+                { name: 'Dra. Claudia Fernández', specialty: 'Médico Internista', experience: '14 años', rating: '⭐⭐⭐⭐', title: 'Especialista en Medicina Interna', certification: 'Certificado' },
+                { name: 'Dr. Luis García', specialty: 'Médico General', experience: '11 años', rating: '⭐⭐⭐⭐⭐', title: 'Médico de Familia', certification: 'Certificado' },
+                { name: 'Dra. Elena Morales', specialty: 'Médico General', experience: '9 años', rating: '⭐⭐⭐⭐', title: 'Médica General', certification: 'Certificado' }
             ],
             'kinesiologia': [
-                { name: 'Lic. Sebastián Torres', specialty: 'Kinesiólogo Deportivo', experience: '10 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Lic. Valentina Cortés', specialty: 'Kinesióloga Rehabilitación', experience: '7 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Lic. Sebastián Torres', specialty: 'Kinesiólogo Deportivo', experience: '10 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista en Kinesiología Deportiva', certification: 'Certificado' },
+                { name: 'Lic. Valentina Cortés', specialty: 'Kinesióloga Rehabilitación', experience: '7 años', rating: '⭐⭐⭐⭐', title: 'Especialista en Rehabilitación', certification: 'Certificado' },
+                { name: 'Lic. Diego Fuentes', specialty: 'Kinesiólogo Clínico', experience: '8 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Clínico', certification: 'Certificado' },
+                { name: 'Lic. Roxana Silva', specialty: 'Kinesióloga Pediátrica', experience: '6 años', rating: '⭐⭐⭐⭐', title: 'Especialista Pediátrica', certification: 'Certificado' }
             ],
             'psicologia': [
-                { name: 'Ps. Rodrigo Vargas', specialty: 'Psicólogo Clínico', experience: '12 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Ps. Carolina Espinoza', specialty: 'Psicóloga Familiar', experience: '9 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Ps. Rodrigo Vargas', specialty: 'Psicólogo Clínico', experience: '12 años', rating: '⭐⭐⭐⭐⭐', title: 'Psicólogo Clínico Senior', certification: 'Certificado' },
+                { name: 'Ps. Carolina Espinoza', specialty: 'Psicóloga Familiar', experience: '9 años', rating: '⭐⭐⭐⭐', title: 'Especialista en Terapia Familiar', certification: 'Certificado' },
+                { name: 'Ps. Marco Antonio López', specialty: 'Psicólogo Organizacional', experience: '11 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Organizacional', certification: 'Certificado' },
+                { name: 'Ps. Daniela Romero', specialty: 'Psicóloga Infantil', experience: '7 años', rating: '⭐⭐⭐⭐', title: 'Especialista Infantil', certification: 'Certificado' }
             ],
             'nutricion': [
-                { name: 'Nut. Daniela Morales', specialty: 'Nutricionista Clínica', experience: '8 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Nut. Felipe Ramírez', specialty: 'Nutricionista Deportivo', experience: '6 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Nut. Daniela Morales', specialty: 'Nutricionista Clínica', experience: '8 años', rating: '⭐⭐⭐⭐⭐', title: 'Nutricionista Clínica Senior', certification: 'Certificado' },
+                { name: 'Nut. Felipe Ramírez', specialty: 'Nutricionista Deportivo', experience: '6 años', rating: '⭐⭐⭐⭐', title: 'Especialista en Nutrición Deportiva', certification: 'Certificado' },
+                { name: 'Nut. Javiera Concha', specialty: 'Nutricionista Clínica', experience: '7 años', rating: '⭐⭐⭐⭐⭐', title: 'Nutricionista Clínica', certification: 'Certificado' },
+                { name: 'Nut. Andrés Muñoz', specialty: 'Nutricionista Infantil', experience: '5 años', rating: '⭐⭐⭐⭐', title: 'Especialista Pediátrico', certification: 'Certificado' }
             ],
             'traumatologia': [
-                { name: 'Dr. Andrés Bustos', specialty: 'Traumatólogo', experience: '16 años', rating: '⭐⭐⭐⭐⭐' },
-                { name: 'Dr. Esteban Parra', specialty: 'Traumatólogo Deportivo', experience: '11 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Dr. Andrés Bustos', specialty: 'Traumatólogo', experience: '16 años', rating: '⭐⭐⭐⭐⭐', title: 'Traumatólogo Senior', certification: 'Certificado' },
+                { name: 'Dr. Esteban Parra', specialty: 'Traumatólogo Deportivo', experience: '11 años', rating: '⭐⭐⭐⭐', title: 'Especialista Deportivo', certification: 'Certificado' },
+                { name: 'Dr. Rafael Gutiérrez', specialty: 'Traumatólogo', experience: '13 años', rating: '⭐⭐⭐⭐⭐', title: 'Traumatólogo Consultor', certification: 'Certificado' },
+                { name: 'Dra. Verónica Navarro', specialty: 'Traumatóloga', experience: '9 años', rating: '⭐⭐⭐⭐', title: 'Traumatóloga', certification: 'Certificado' }
             ],
             'medicina-laboral': [
-                { name: 'Dr. Luis Herrera', specialty: 'Médico Laboral', experience: '13 años', rating: '⭐⭐⭐⭐' }
+                { name: 'Dr. Luis Herrera', specialty: 'Médico Laboral', experience: '13 años', rating: '⭐⭐⭐⭐', title: 'Médico Laboral Senior', certification: 'Certificado' },
+                { name: 'Dra. Beatriz Cortés', specialty: 'Médica Laboral', experience: '10 años', rating: '⭐⭐⭐⭐⭐', title: 'Médica Laboral', certification: 'Certificado' },
+                { name: 'Dr. Fernando Soto', specialty: 'Médico Ocupacional', experience: '12 años', rating: '⭐⭐⭐⭐⭐', title: 'Especialista Ocupacional', certification: 'Certificado' }
             ]
         };
 
@@ -574,6 +794,7 @@
 
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Sistema iniciado');
             loadSpecialties();
             setupDatePicker();
         });
@@ -585,7 +806,6 @@
             maxDate.setMonth(maxDate.getMonth() + 3);
             dateInput.setAttribute('min', today);
             dateInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
-            dateInput.addEventListener('change', loadTimeSlots);
         }
 
         // ===== CARGAR ESPECIALIDADES =====
@@ -624,11 +844,23 @@
                 const card = document.createElement('div');
                 card.className = 'doctor-card';
                 card.innerHTML = `
-                    <div class="doctor-avatar">👨‍⚕️</div>
-                    <div class="doctor-name">${doc.name}</div>
-                    <div class="doctor-specialty">${doc.specialty}</div>
-                    <div class="doctor-experience">${doc.experience}</div>
-                    <div class="doctor-rating">${doc.rating}</div>
+                    <div class="doctor-header">
+                        <div class="doctor-avatar">👨‍⚕️</div>
+                        <div class="doctor-name">${doc.name}</div>
+                        <div class="doctor-title">${doc.title}</div>
+                    </div>
+                    <div class="doctor-body">
+                        <div class="doctor-specialty">${doc.specialty}</div>
+                        <div class="doctor-info">
+                            <div class="info-row">
+                                <span class="info-icon">📅</span>
+                                <span>${doc.experience}</span>
+                            </div>
+                            <div class="doctor-rating">${doc.rating}</div>
+                            <div class="doctor-badge">${doc.certification}</div>
+                        </div>
+                        <div class="doctor-availability">✓ Disponible</div>
+                    </div>
                 `;
                 card.onclick = () => selectDoctor(doc, card);
                 container.appendChild(card);
@@ -647,21 +879,11 @@
             const container = document.getElementById('times-container');
             container.innerHTML = '';
             
-            const occupiedSlots = Math.random() > 0.5 ? ['10:00', '14:30', '16:00'] : ['09:30', '11:00', '15:00'];
-            
             timeSlots.forEach(time => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                
-                if (occupiedSlots.includes(time)) {
-                    card.style.opacity = '0.5';
-                    card.style.cursor = 'not-allowed';
-                    card.textContent = time + ' (Ocupado)';
-                } else {
-                    card.textContent = time;
-                    card.onclick = () => selectTime(time, card);
-                }
-                
+                card.textContent = time;
+                card.onclick = () => selectTime(time, card);
                 container.appendChild(card);
             });
         }
@@ -691,15 +913,15 @@
         }
 
         function updateDisplay() {
-            // Ocultar todas las secciones
             document.querySelectorAll('.form-section').forEach(section => {
                 section.classList.remove('visible');
             });
             
-            // Mostrar la sección actual
-            document.getElementById('step-' + currentStep).classList.add('visible');
+            const activeSection = document.getElementById('step-' + currentStep);
+            if (activeSection) {
+                activeSection.classList.add('visible');
+            }
             
-            // Actualizar indicadores
             document.querySelectorAll('.step-indicator .step').forEach((step, index) => {
                 step.classList.remove('active', 'completed');
                 const stepNum = index + 1;
@@ -711,12 +933,10 @@
                 }
             });
             
-            // Actualizar botones
             document.getElementById('btn-prev').style.display = currentStep > 1 ? 'block' : 'none';
             document.getElementById('btn-next').style.display = currentStep < 5 ? 'block' : 'none';
             document.getElementById('btn-submit').style.display = currentStep === 5 ? 'block' : 'none';
             
-            // Cargar contenido específico
             if (currentStep === 2) {
                 loadDoctors();
             } else if (currentStep === 3) {
@@ -745,7 +965,6 @@
                     return true;
                 case 3:
                     appointmentData.date = document.getElementById('appointment-date').value;
-                    appointmentData.time = appointmentData.time;
                     if (!appointmentData.date || !appointmentData.time) {
                         alert('Por favor, seleccione fecha y hora');
                         return false;
@@ -795,35 +1014,35 @@
             
             container.innerHTML = `
                 <div class="summary-item">
-                    <span class="summary-label">Especialidad:</span>
+                    <span class="summary-label">🏥 Especialidad:</span>
                     <span class="summary-value">${appointmentData.specialtyName}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Profesional:</span>
+                    <span class="summary-label">👨‍⚕️ Profesional:</span>
                     <span class="summary-value">${appointmentData.doctor.name}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Especialidad del Doctor:</span>
+                    <span class="summary-label">🏷️ Especialidad del Doctor:</span>
                     <span class="summary-value">${appointmentData.doctor.specialty}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Fecha:</span>
+                    <span class="summary-label">📅 Fecha:</span>
                     <span class="summary-value">${formatDate(appointmentData.date)}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Hora:</span>
+                    <span class="summary-label">⏰ Hora:</span>
                     <span class="summary-value">${appointmentData.time}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Paciente:</span>
+                    <span class="summary-label">👤 Paciente:</span>
                     <span class="summary-value">${appointmentData.patient.fullName}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Email:</span>
+                    <span class="summary-label">📧 Email:</span>
                     <span class="summary-value">${appointmentData.patient.email}</span>
                 </div>
                 <div class="summary-item">
-                    <span class="summary-label">Teléfono:</span>
+                    <span class="summary-label">📱 Teléfono:</span>
                     <span class="summary-value">${appointmentData.patient.phone}</span>
                 </div>
             `;
@@ -835,15 +1054,39 @@
             const message = document.getElementById('modal-message');
             
             message.innerHTML = `
-                <strong>¡Su cita ha sido agendada exitosamente!</strong><br><br>
-                Especialidad: ${appointmentData.specialtyName}<br>
-                Profesional: ${appointmentData.doctor.name}<br>
-                Fecha: ${new Date(appointmentData.date + 'T00:00:00').toLocaleDateString('es-CL')}<br>
-                Hora: ${appointmentData.time}<br><br>
-                Se ha enviado una confirmación a: ${appointmentData.patient.email}
+                <strong>${appointmentData.specialtyName}</strong><br>
+                Profesional: ${appointmentData.doctor.name}<br><br>
+                📅 ${new Date(appointmentData.date + 'T00:00:00').toLocaleDateString('es-CL')} a las ${appointmentData.time}<br><br>
+                Se ha enviado una confirmación a:<br>
+                <strong>${appointmentData.patient.email}</strong>
             `;
             
             modal.classList.add('show');
+        }
+
+        // ===== RESETEAR FORMULARIO =====
+        function resetForm() {
+            currentStep = 1;
+            appointmentData = {
+                specialty: null,
+                specialtyName: null,
+                doctor: null,
+                date: null,
+                time: null,
+                patient: {}
+            };
+            
+            document.getElementById('appointment-date').value = '';
+            document.getElementById('full-name').value = '';
+            document.getElementById('rut').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('birthdate').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('reason').value = '';
+            
+            document.getElementById('success-modal').classList.remove('show');
+            updateDisplay();
         }
     </script>
 </body>
