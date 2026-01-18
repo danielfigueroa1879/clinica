@@ -19,10 +19,20 @@
             color: #333;
         }
 
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(45, 106, 79, 0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
         .home-button {
-            position: fixed;
-            top: 15px;
-            right: 15px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
             background: #2d6a4f;
             color: white;
             border: none;
@@ -32,7 +42,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
-            z-index: 999;
+            z-index: 100;
             text-decoration: none;
             display: inline-block;
             font-size: 0.85rem;
@@ -42,15 +52,6 @@
             background: #1b4332;
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(45, 106, 79, 0.15);
-            overflow: hidden;
         }
 
         .header {
@@ -90,6 +91,7 @@
 
         .content {
             padding: 30px 20px;
+            padding-top: 50px;
         }
 
         .step-indicator {
@@ -143,7 +145,7 @@
         }
 
         .section-title {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: #2d6a4f;
             margin-bottom: 25px;
             text-align: center;
@@ -202,141 +204,100 @@
             line-height: 1.3;
         }
 
-        /* ===== GRID PARA DOCTORES ===== */
-        .doctors-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+        /* ===== LISTADO DE DOCTORES ===== */
+        .doctors-container {
             margin-bottom: 25px;
-            width: 100%;
         }
 
-        /* ===== DOCTOR CARD PROFESIONAL ===== */
-        .doctor-card {
-            padding: 0;
+        .specialty-group {
+            margin-bottom: 30px;
+        }
+
+        .specialty-title {
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .doctors-list {
             border: 1px solid #d4d4d4;
-            border-radius: 12px;
-            text-align: center;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .doctor-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
             cursor: pointer;
             transition: all 0.3s ease;
             background: white;
             display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            min-height: auto;
+            align-items: center;
+            gap: 15px;
         }
 
-        .doctor-card:hover {
-            border-color: #2d6a4f;
-            box-shadow: 0 8px 25px rgba(45, 106, 79, 0.2);
-            transform: translateY(-5px);
+        .doctor-item:hover {
+            background: #f9fdf9;
+            padding-left: 25px;
         }
 
-        .doctor-card.selected {
+        .doctor-item:last-child {
+            border-bottom: none;
+        }
+
+        .doctor-item.selected {
             background: #e8f5e9;
-            border-color: #2d6a4f;
-            border-width: 2px;
-            box-shadow: 0 8px 30px rgba(45, 106, 79, 0.25);
-        }
-
-        .doctor-header {
-            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
-            color: white;
-            padding: 20px 15px;
-            position: relative;
+            border-left: 4px solid #2d6a4f;
+            padding-left: 16px;
         }
 
         .doctor-avatar {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            display: block;
+            font-size: 2.2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .doctor-info {
+            flex: 1;
         }
 
         .doctor-name {
             font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 5px;
-            color: white;
-        }
-
-        .doctor-title {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
-            margin-bottom: 3px;
-        }
-
-        .doctor-body {
-            padding: 15px 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .doctor-specialty {
-            font-size: 0.9rem;
             color: #2d6a4f;
-            margin-bottom: 10px;
-            font-weight: 600;
-            padding: 6px;
-            background: #e8f5e9;
-            border-radius: 6px;
+            margin-bottom: 4px;
         }
 
-        .doctor-info {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: #555;
-        }
-
-        .info-icon {
+        .doctor-details {
             font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .doctor-rating {
             color: #d4a574;
-            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
         }
 
         .doctor-badge {
-            display: inline-block;
             background: #52b788;
             color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 3px 10px;
+            border-radius: 12px;
             font-size: 0.75rem;
             font-weight: 600;
-            margin: 0 4px 8px 0;
-        }
-
-        .doctor-availability {
-            font-size: 0.8rem;
-            color: #52b788;
-            font-weight: 600;
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid #e0e0e0;
         }
 
         /* ===== FORMULARIO ===== */
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
@@ -371,28 +332,42 @@
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
-        /* ===== RESUMEN ===== */
-        .summary {
+        /* ===== RESUMEN ADAPTADO ===== */
+        .summary-box {
             background: linear-gradient(135deg, #f9fdf9 0%, #f0f8f0 100%);
-            padding: 20px;
+            border: 2px solid #2d6a4f;
             border-radius: 12px;
-            border-left: 5px solid #2d6a4f;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .summary-section {
+            margin-bottom: 25px;
+        }
+
+        .summary-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d6a4f;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f5e9;
         }
 
         .summary-item {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 0.9rem;
-        }
-
-        .summary-item:last-child {
-            border-bottom: none;
+            font-size: 0.95rem;
+            align-items: center;
         }
 
         .summary-label {
@@ -403,7 +378,7 @@
         .summary-value {
             color: #333;
             text-align: right;
-            margin-left: 10px;
+            margin-left: 20px;
         }
 
         /* ===== BOTONES ===== */
@@ -440,10 +415,6 @@
             box-shadow: 0 6px 18px rgba(45, 106, 79, 0.4);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
         .btn-secondary {
             background: #c8e6c9;
             color: #1b4332;
@@ -476,7 +447,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(27, 67, 50, 0.6);
+            background: rgba(27, 67, 50, 0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -489,15 +460,14 @@
 
         .modal-content {
             background: white;
-            padding: 30px 25px;
+            padding: 40px 30px;
             border-radius: 16px;
-            max-width: 100%;
+            max-width: 600px;
             width: 100%;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.4s ease;
-            max-height: 90vh;
-            overflow-y: auto;
+            border-top: 5px solid #52b788;
         }
 
         @keyframes slideUp {
@@ -508,54 +478,57 @@
         .modal-content h2 {
             color: #2d6a4f;
             margin-bottom: 15px;
-            font-size: 1.6rem;
+            font-size: 2rem;
             font-weight: 700;
         }
 
-        .modal-content p {
-            color: #555;
-            margin-bottom: 10px;
-            line-height: 1.6;
-            font-size: 0.95rem;
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
         }
 
-        .success-icon {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            display: block;
+        .modal-info {
+            background: #f0f8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #2d6a4f;
+        }
+
+        .modal-info p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .modal-info strong {
+            color: #2d6a4f;
         }
 
         .modal-buttons {
             display: flex;
-            flex-direction: column;
             gap: 12px;
             justify-content: center;
             margin-top: 25px;
         }
 
         .modal-buttons button {
-            width: 100%;
-            min-width: unset;
+            flex: 1;
         }
 
-        /* ===== RESPONSIVE BREAKPOINTS ===== */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
-            body {
-                padding: 15px 10px;
+            .container {
+                border-radius: 8px;
             }
 
             .home-button {
-                position: fixed;
-                top: 12px;
-                right: 12px;
-                padding: 8px 14px;
-                font-size: 0.75rem;
-            }
-
-            .container {
-                max-width: 100%;
-                margin: 0 auto;
-                border-radius: 12px;
+                position: static;
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+                border-radius: 8px;
             }
 
             .header {
@@ -564,198 +537,75 @@
 
             .header h1 {
                 font-size: 1.8rem;
-                margin-bottom: 5px;
-            }
-
-            .header p {
-                font-size: 0.9rem;
             }
 
             .content {
                 padding: 20px 15px;
-            }
-
-            .step-indicator {
-                margin-bottom: 20px;
-                gap: 8px;
-            }
-
-            .step {
-                padding: 10px 8px;
-                font-size: 0.7rem;
-                min-width: 70px;
-                border-radius: 6px;
+                padding-top: 20px;
             }
 
             .section-title {
                 font-size: 1.4rem;
-                margin-bottom: 20px;
-            }
-
-            .grid {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-                gap: 12px;
-                margin-bottom: 20px;
-            }
-
-            .card {
-                padding: 15px 12px;
-                min-height: 110px;
-                border-radius: 10px;
-            }
-
-            .card-icon {
-                font-size: 2rem;
-                margin-bottom: 6px;
-            }
-
-            .card-title {
-                font-size: 0.8rem;
-            }
-
-            .doctors-grid {
-                gap: 12px;
-                margin-bottom: 20px;
-            }
-
-            .doctor-header {
-                padding: 15px 12px;
-            }
-
-            .doctor-avatar {
-                font-size: 2.4rem;
-                margin-bottom: 8px;
-            }
-
-            .doctor-name {
-                font-size: 1rem;
-                margin-bottom: 3px;
-            }
-
-            .doctor-title {
-                font-size: 0.75rem;
-            }
-
-            .doctor-body {
-                padding: 12px 12px;
-            }
-
-            .doctor-specialty {
-                font-size: 0.85rem;
-                margin-bottom: 8px;
-                padding: 4px;
-            }
-
-            .doctor-info {
-                gap: 6px;
-                margin-bottom: 8px;
-            }
-
-            .info-row {
-                font-size: 0.75rem;
-                gap: 4px;
-            }
-
-            .doctor-rating {
-                font-size: 0.85rem;
-                margin-bottom: 6px;
-            }
-
-            .doctor-badge {
-                padding: 3px 8px;
-                font-size: 0.7rem;
-            }
-
-            .doctor-availability {
-                font-size: 0.75rem;
-                padding-top: 8px;
-            }
-
-            .form-group {
-                margin-bottom: 15px;
-            }
-
-            .form-group label {
-                font-size: 0.9rem;
-                margin-bottom: 6px;
-            }
-
-            .form-group input,
-            .form-group select,
-            .form-group textarea {
-                padding: 11px 12px;
-                font-size: 16px;
-                border-radius: 6px;
             }
 
             .form-row {
+                grid-template-columns: 1fr;
                 gap: 15px;
             }
 
-            .summary {
-                padding: 15px;
-                border-radius: 10px;
+            .doctor-item {
+                padding: 12px 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .doctor-avatar {
+                min-width: auto;
+            }
+
+            .doctor-details {
+                justify-content: center;
+            }
+
+            .summary-box {
+                padding: 20px;
             }
 
             .summary-item {
-                padding: 10px 0;
-                font-size: 0.85rem;
                 flex-direction: column;
-                text-align: left;
+                align-items: flex-start;
+                gap: 8px;
             }
 
             .summary-value {
-                text-align: left;
                 margin-left: 0;
-                margin-top: 4px;
-            }
-
-            .buttons {
-                gap: 10px;
-                margin-top: 25px;
-                flex-direction: column;
-            }
-
-            button {
-                padding: 11px 20px;
-                font-size: 0.9rem;
-                min-width: 100%;
+                text-align: left;
                 width: 100%;
             }
 
             .modal-content {
                 padding: 25px 20px;
-                border-radius: 12px;
-                margin: 20px;
             }
 
             .modal-content h2 {
-                font-size: 1.4rem;
-                margin-bottom: 12px;
-            }
-
-            .modal-content p {
-                font-size: 0.9rem;
-                margin-bottom: 8px;
+                font-size: 1.6rem;
             }
 
             .success-icon {
                 font-size: 3rem;
-                margin-bottom: 12px;
             }
 
-            .modal-buttons {
-                gap: 10px;
-                margin-top: 20px;
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                min-width: unset;
             }
         }
 
         @media (max-width: 400px) {
-            .home-button {
-                padding: 7px 12px;
-                font-size: 0.7rem;
-            }
-
             .header h1 {
                 font-size: 1.6rem;
             }
@@ -764,32 +614,25 @@
                 font-size: 1.3rem;
             }
 
-            .step {
-                padding: 8px 6px;
-                font-size: 0.65rem;
-                min-width: 65px;
+            .summary-box {
+                padding: 15px;
             }
 
-            .card-icon {
-                font-size: 1.8rem;
+            .modal-content {
+                padding: 20px 15px;
             }
 
-            .doctor-avatar {
-                font-size: 2.2rem;
-            }
-
-            button {
-                padding: 10px 18px;
-                font-size: 0.85rem;
+            .modal-buttons {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Botón de Inicio (Visible siempre) -->
-    <a href="index.html" class="home-button">🏠 Inicio</a>
-
     <div class="container">
+        <!-- Botón de Inicio (Dentro del container) -->
+        <a href="index.html" class="home-button">🏠 Volver a Inicio</a>
+
         <div class="header">
             <h1>🏥 Clínica Médica</h1>
             <p>Agendamiento de Citas</p>
@@ -807,18 +650,14 @@
 
             <!-- PASO 1: Especialidades -->
             <div class="form-section visible" id="step-1">
-                <h2 class="section-title">Especialidad</h2>
-                <div class="grid" id="specialties-container">
-                    <!-- Las especialidades se cargarán aquí -->
-                </div>
+                <h2 class="section-title">Seleccione Especialidad</h2>
+                <div class="grid" id="specialties-container"></div>
             </div>
 
-            <!-- PASO 2: Doctores -->
+            <!-- PASO 2: Doctores en Listado -->
             <div class="form-section" id="step-2">
-                <h2 class="section-title">Profesional</h2>
-                <div class="doctors-grid" id="doctors-container">
-                    <!-- Los doctores se cargarán aquí -->
-                </div>
+                <h2 class="section-title">Seleccione Profesional</h2>
+                <div class="doctors-container" id="doctors-container"></div>
             </div>
 
             <!-- PASO 3: Fecha y Hora -->
@@ -829,10 +668,8 @@
                     <input type="date" id="appointment-date" required>
                 </div>
                 <div class="form-group">
-                    <label>⏰ Horarios:</label>
-                    <div class="grid" id="times-container">
-                        <!-- Los horarios se cargarán aquí -->
-                    </div>
+                    <label>⏰ Horarios Disponibles:</label>
+                    <div class="grid" id="times-container"></div>
                 </div>
             </div>
 
@@ -841,11 +678,9 @@
                 <h2 class="section-title">Datos Personales</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="full-name">Nombre *</label>
-                        <input type="text" id="full-name" placeholder="Juan Pérez" required>
+                        <label for="full-name">Nombre Completo *</label>
+                        <input type="text" id="full-name" placeholder="Juan Pérez García" required>
                     </div>
-                </div>
-                <div class="form-row">
                     <div class="form-group">
                         <label for="rut">RUT *</label>
                         <input type="text" id="rut" placeholder="12.345.678-9" required>
@@ -856,8 +691,6 @@
                         <label for="email">Email *</label>
                         <input type="email" id="email" placeholder="correo@ejemplo.com" required>
                     </div>
-                </div>
-                <div class="form-row">
                     <div class="form-group">
                         <label for="phone">Teléfono *</label>
                         <input type="tel" id="phone" placeholder="+56 9 1234 5678" required>
@@ -865,11 +698,9 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="birthdate">Nacimiento *</label>
+                        <label for="birthdate">Fecha de Nacimiento *</label>
                         <input type="date" id="birthdate" required>
                     </div>
-                </div>
-                <div class="form-row">
                     <div class="form-group">
                         <label for="gender">Género *</label>
                         <select id="gender" required>
@@ -880,27 +711,23 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="reason">Motivo (Opcional)</label>
-                        <textarea id="reason" rows="3" placeholder="Describa el motivo..."></textarea>
-                    </div>
+                <div class="form-group">
+                    <label for="reason">Motivo de la Consulta</label>
+                    <textarea id="reason" rows="4" placeholder="Describa brevemente..."></textarea>
                 </div>
             </div>
 
             <!-- PASO 5: Confirmación -->
             <div class="form-section" id="step-5">
-                <h2 class="section-title">Confirmación</h2>
-                <div class="summary" id="summary-container">
-                    <!-- El resumen se mostrará aquí -->
-                </div>
+                <h2 class="section-title">Resumen de Cita</h2>
+                <div class="summary-box" id="summary-container"></div>
             </div>
 
             <!-- Botones de Navegación -->
             <div class="buttons">
-                <button class="btn-secondary" id="btn-prev" style="display:none;" onclick="previousStep()">← Atrás</button>
+                <button class="btn-secondary" id="btn-prev" style="display:none;" onclick="previousStep()">← Anterior</button>
                 <button class="btn-primary" id="btn-next" onclick="nextStep()">Siguiente →</button>
-                <button class="btn-success" id="btn-submit" style="display:none;" onclick="submitAppointment()">✓ Confirmar</button>
+                <button class="btn-success" id="btn-submit" style="display:none;" onclick="submitAppointment()">✓ Confirmar Cita</button>
             </div>
         </div>
     </div>
@@ -909,19 +736,18 @@
     <div class="modal" id="success-modal">
         <div class="modal-content">
             <span class="success-icon">✅</span>
-            <h2>¡Cita Agendada!</h2>
-            <p id="modal-message"></p>
+            <h2>¡Cita Agendada Exitosamente!</h2>
+            <div class="modal-info" id="modal-message"></div>
             <div class="modal-buttons">
-                <button class="btn-primary" onclick="resetForm()">Agendar Otra</button>
+                <button class="btn-primary" onclick="resetForm()">Agendar Otra Cita</button>
                 <a href="index.html" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                    <button class="btn-secondary" style="width: 100%; margin: 0;">Ir a Inicio</button>
+                    <button class="btn-secondary" style="width: 100%; margin: 0;">Volver a Inicio</button>
                 </a>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== BASE DE DATOS =====
         const specialties = [
             { id: 'odontologia-adultos', name: 'Odontología Adultos', icon: '🦷' },
             { id: 'odontologia-ninos', name: 'Odontología Infantil', icon: '👶' },
@@ -985,21 +811,10 @@
             ]
         };
 
-        const timeSlots = [
-            '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-            '12:00', '12:30', '14:00', '14:30', '15:00', '15:30',
-            '16:00', '16:30', '17:00', '17:30', '18:00'
-        ];
+        const timeSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'];
 
         let currentStep = 1;
-        let appointmentData = {
-            specialty: null,
-            specialtyName: null,
-            doctor: null,
-            date: null,
-            time: null,
-            patient: {}
-        };
+        let appointmentData = { specialty: null, specialtyName: null, doctor: null, date: null, time: null, patient: {} };
 
         document.addEventListener('DOMContentLoaded', function() {
             loadSpecialties();
@@ -1038,18 +853,44 @@
             const container = document.getElementById('doctors-container');
             container.innerHTML = '';
             const doctorList = doctors[appointmentData.specialty] || [];
+            const specialty = specialties.find(s => s.id === appointmentData.specialty);
+            
+            const group = document.createElement('div');
+            group.className = 'specialty-group';
+            
+            const title = document.createElement('div');
+            title.className = 'specialty-title';
+            title.textContent = specialty.name;
+            group.appendChild(title);
+            
+            const list = document.createElement('div');
+            list.className = 'doctors-list';
+            
             doctorList.forEach((doc) => {
-                const card = document.createElement('div');
-                card.className = 'doctor-card';
-                card.innerHTML = `<div class="doctor-header"><div class="doctor-avatar">👨‍⚕️</div><div class="doctor-name">${doc.name}</div><div class="doctor-title">${doc.title}</div></div><div class="doctor-body"><div class="doctor-specialty">${doc.specialty}</div><div class="doctor-info"><div class="info-row"><span class="info-icon">📅</span><span>${doc.experience}</span></div><div class="doctor-rating">${doc.rating}</div><div class="doctor-badge">${doc.certification}</div></div><div class="doctor-availability">✓ Disponible</div></div>`;
-                card.onclick = () => selectDoctor(doc, card);
-                container.appendChild(card);
+                const item = document.createElement('div');
+                item.className = 'doctor-item';
+                item.innerHTML = `
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-name">${doc.name}</div>
+                        <div class="doctor-details">
+                            <span>📅 ${doc.experience}</span>
+                            <span class="doctor-rating">${doc.rating}</span>
+                            <span class="doctor-badge">${doc.certification}</span>
+                        </div>
+                    </div>
+                `;
+                item.onclick = () => selectDoctor(doc, item);
+                list.appendChild(item);
             });
+            
+            group.appendChild(list);
+            container.appendChild(group);
         }
 
         function selectDoctor(doc, element) {
             appointmentData.doctor = doc;
-            document.querySelectorAll('#doctors-container .doctor-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('#doctors-container .doctor-item').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
         }
 
@@ -1087,9 +928,7 @@
         }
 
         function updateDisplay() {
-            document.querySelectorAll('.form-section').forEach(section => {
-                section.classList.remove('visible');
-            });
+            document.querySelectorAll('.form-section').forEach(section => section.classList.remove('visible'));
             const activeSection = document.getElementById('step-' + currentStep);
             if (activeSection) activeSection.classList.add('visible');
             
@@ -1131,7 +970,7 @@
                     const birthdate = document.getElementById('birthdate').value;
                     const gender = document.getElementById('gender').value;
                     if (!fullName || !email || !phone || !rut || !birthdate || !gender) {
-                        alert('Complete todos los campos');
+                        alert('Complete todos los campos requeridos');
                         return false;
                     }
                     appointmentData.patient = { fullName, email, phone, rut, birthdate, gender, reason: document.getElementById('reason').value };
@@ -1147,13 +986,78 @@
                 const date = new Date(dateStr + 'T00:00:00');
                 return date.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             };
-            container.innerHTML = `<div class="summary-item"><span class="summary-label">Especialidad:</span><span class="summary-value">${appointmentData.specialtyName}</span></div><div class="summary-item"><span class="summary-label">Profesional:</span><span class="summary-value">${appointmentData.doctor.name}</span></div><div class="summary-item"><span class="summary-label">Especialidad:</span><span class="summary-value">${appointmentData.doctor.specialty}</span></div><div class="summary-item"><span class="summary-label">Fecha:</span><span class="summary-value">${formatDate(appointmentData.date)}</span></div><div class="summary-item"><span class="summary-label">Hora:</span><span class="summary-value">${appointmentData.time}</span></div><div class="summary-item"><span class="summary-label">Paciente:</span><span class="summary-value">${appointmentData.patient.fullName}</span></div><div class="summary-item"><span class="summary-label">Email:</span><span class="summary-value">${appointmentData.patient.email}</span></div><div class="summary-item"><span class="summary-label">Teléfono:</span><span class="summary-value">${appointmentData.patient.phone}</span></div>`;
+            
+            container.innerHTML = `
+                <div class="summary-section">
+                    <div class="summary-section-title">📋 Información de la Cita</div>
+                    <div class="summary-item">
+                        <span class="summary-label">Especialidad:</span>
+                        <span class="summary-value">${appointmentData.specialtyName}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Profesional:</span>
+                        <span class="summary-value">${appointmentData.doctor.name}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Especialidad del Dr:</span>
+                        <span class="summary-value">${appointmentData.doctor.specialty}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Fecha:</span>
+                        <span class="summary-value">${formatDate(appointmentData.date)}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Hora:</span>
+                        <span class="summary-value">${appointmentData.time}</span>
+                    </div>
+                </div>
+                <div class="summary-section">
+                    <div class="summary-section-title">👤 Datos del Paciente</div>
+                    <div class="summary-item">
+                        <span class="summary-label">Nombre:</span>
+                        <span class="summary-value">${appointmentData.patient.fullName}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">RUT:</span>
+                        <span class="summary-value">${appointmentData.patient.rut}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Email:</span>
+                        <span class="summary-value">${appointmentData.patient.email}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Teléfono:</span>
+                        <span class="summary-value">${appointmentData.patient.phone}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Género:</span>
+                        <span class="summary-value">${appointmentData.patient.gender === 'M' ? 'Masculino' : appointmentData.patient.gender === 'F' ? 'Femenino' : 'Otro'}</span>
+                    </div>
+                </div>
+            `;
         }
 
         function submitAppointment() {
             const modal = document.getElementById('success-modal');
             const message = document.getElementById('modal-message');
-            message.innerHTML = `<strong>${appointmentData.specialtyName}</strong><br>Profesional: ${appointmentData.doctor.name}<br><br>📅 ${new Date(appointmentData.date + 'T00:00:00').toLocaleDateString('es-CL')} a las ${appointmentData.time}<br><br>Confirmación enviada a:<br><strong>${appointmentData.patient.email}</strong>`;
+            
+            const formatDate = (dateStr) => {
+                const date = new Date(dateStr + 'T00:00:00');
+                return date.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            };
+            
+            message.innerHTML = `
+                <p><strong>Especialidad:</strong> ${appointmentData.specialtyName}</p>
+                <p><strong>Profesional:</strong> ${appointmentData.doctor.name}</p>
+                <p><strong>Fecha:</strong> ${formatDate(appointmentData.date)}</p>
+                <p><strong>Hora:</strong> ${appointmentData.time}</p>
+                <p><strong>Paciente:</strong> ${appointmentData.patient.fullName}</p>
+                <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #d4d4d4;">
+                    Se ha enviado una confirmación a:<br>
+                    <strong style="color: #2d6a4f;">${appointmentData.patient.email}</strong>
+                </p>
+            `;
+            
             modal.classList.add('show');
         }
 
