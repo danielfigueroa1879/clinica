@@ -1,7 +1,7 @@
 /**
  * ============================================
- * SISTEMA DE AGENDAMIENTO DE CITAS
- * Archivo: agendar-cita.js
+ * SISTEMA DE AGENDAMIENTO DE CITAS - VERSIÓN ARREGLADA
+ * Archivo: agendar-cita.js (FIXED)
  * ============================================
  */
 
@@ -153,7 +153,7 @@ const doctorsDatabase = {
     ]
 };
 
-// ===== HORARIOS DISPONIBLES (9:00 AM - 6:00 PM) =====
+// ===== HORARIOS DISPONIBLES =====
 const availableTimeSlots = [
     '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
     '12:00', '12:30', '14:00', '14:30', '15:00', '15:30',
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initAppointmentSystem() {
-    console.log('Sistema de agendamiento iniciado');
+    console.log('✅ Sistema de agendamiento iniciado');
     
     // Event listeners para navegación
     const nextBtn = document.getElementById('nextBtn');
@@ -228,7 +228,7 @@ function initAppointmentSystem() {
 
 // ===== SELECCIÓN DE ESPECIALIDAD =====
 function selectSpecialty(element) {
-    console.log('🏥 Click en especialidad');
+    console.log('🏥 Especialidad seleccionada');
     
     // Remover selección anterior
     const allSpecialtyOptions = document.querySelectorAll('.specialty-option');
@@ -241,13 +241,12 @@ function selectSpecialty(element) {
     appointmentData.specialty = element.dataset.specialty;
     appointmentData.specialtyName = element.querySelector('h4').textContent;
     
-    console.log('✅ Especialidad seleccionada:', appointmentData.specialtyName);
-    console.log('📋 Código de especialidad:', appointmentData.specialty);
+    console.log('✅ Especialidad:', appointmentData.specialtyName);
 }
 
-// ===== CARGAR DOCTORES =====
+// ===== CARGAR DOCTORES - VERSIÓN ARREGLADA =====
 function loadDoctors() {
-    console.log('🔄 === INICIANDO loadDoctors() ===');
+    console.log('🏥 CARGANDO DOCTORES...');
     
     const doctorSelection = document.getElementById('doctorSelection');
     
@@ -256,25 +255,14 @@ function loadDoctors() {
         return;
     }
     
-    // FORZAR estilos del contenedor
-    doctorSelection.style.display = 'grid';
-    doctorSelection.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
-    doctorSelection.style.gap = '1.5rem';
-    doctorSelection.style.minHeight = '300px';
-    doctorSelection.style.width = '100%';
-    doctorSelection.style.margin = '0';
-    doctorSelection.style.padding = '0';
-    
-    console.log('✅ Contenedor encontrado y estilos aplicados:', doctorSelection);
-    
     // Obtener doctores para la especialidad seleccionada
     const doctors = doctorsDatabase[appointmentData.specialty] || [];
     
-    console.log(`📋 Cargando ${doctors.length} doctores para: ${appointmentData.specialtyName}`);
+    console.log(`📋 Total de doctores: ${doctors.length}`);
     
     if (doctors.length === 0) {
         doctorSelection.innerHTML = `
-            <p style="grid-column: 1/-1; text-align: center; color: #666; font-size: 1.2rem; padding: 2rem;">
+            <p style="text-align: center; padding: 3rem 2rem; grid-column: 1/-1; color: #666;">
                 No hay doctores disponibles para esta especialidad.
             </p>
         `;
@@ -284,141 +272,35 @@ function loadDoctors() {
     // Limpiar contenedor
     doctorSelection.innerHTML = '';
     
-    // Crear tarjetas DIRECTAMENTE en el DOM (no con innerHTML)
+    // Crear HTML de doctores
+    let doctorsHTML = '';
     doctors.forEach((doctor, index) => {
-        // Crear tarjeta principal
-        const card = document.createElement('div');
-        card.className = 'doctor-card';
-        card.setAttribute('data-doctor-index', index);
-        card.onclick = function() { handleDoctorClick(index); return false; };
-        
-        // ESTILOS INLINE COMPLETOS
-        card.style.cssText = `
-            display: flex !important;
-            background: white !important;
-            border: 2px solid #e0e0e0 !important;
-            border-radius: 12px !important;
-            padding: 2rem !important;
-            margin-bottom: 1rem !important;
-            cursor: pointer !important;
-            align-items: center !important;
-            gap: 1.5rem !important;
-            min-height: 140px !important;
-            height: auto !important;
-            width: 100% !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transition: all 0.3s ease !important;
-            box-sizing: border-box !important;
-            overflow: visible !important;
-            position: relative !important;
+        doctorsHTML += `
+            <div class="doctor-card" data-doctor-id="${doctor.id}" data-doctor-index="${index}" 
+                 onclick="selectDoctor(${index}); return false;">
+                <div class="doctor-photo">
+                    ${doctor.photo}
+                </div>
+                <div class="doctor-info">
+                    <h4>${doctor.name}</h4>
+                    <span class="specialty-badge">${doctor.specialty}</span>
+                    <p>📚 ${doctor.experience}</p>
+                    <div class="doctor-rating">${doctor.rating}</div>
+                </div>
+            </div>
         `;
-        
-        // Crear foto
-        const photo = document.createElement('div');
-        photo.className = 'doctor-photo';
-        photo.textContent = doctor.photo;
-        photo.style.cssText = `
-            width: 80px !important;
-            height: 80px !important;
-            min-width: 80px !important;
-            min-height: 80px !important;
-            border-radius: 50% !important;
-            background: linear-gradient(135deg, #3da672, #2d8659) !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-size: 2.5rem !important;
-            flex-shrink: 0 !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        `;
-        
-        // Crear contenedor de info
-        const info = document.createElement('div');
-        info.className = 'doctor-info';
-        info.style.cssText = `
-            flex: 1 !important;
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        `;
-        
-        // Crear nombre
-        const name = document.createElement('h4');
-        name.textContent = doctor.name;
-        name.style.cssText = `
-            color: #2d8659 !important;
-            font-size: 1.3rem !important;
-            margin: 0 0 0.5rem 0 !important;
-            font-weight: 700 !important;
-            display: block !important;
-            line-height: 1.4 !important;
-        `;
-        
-        // Crear badge
-        const badge = document.createElement('span');
-        badge.className = 'specialty-badge';
-        badge.textContent = doctor.specialty;
-        badge.style.cssText = `
-            display: inline-block !important;
-            background: #d4af37 !important;
-            color: #1e5f42 !important;
-            padding: 0.3rem 1rem !important;
-            border-radius: 20px !important;
-            font-size: 0.85rem !important;
-            font-weight: 600 !important;
-            margin-bottom: 0.5rem !important;
-        `;
-        
-        // Crear experiencia
-        const experience = document.createElement('p');
-        experience.textContent = `📚 ${doctor.experience}`;
-        experience.style.cssText = `
-            margin: 0.5rem 0 !important;
-            color: #666 !important;
-            font-size: 1rem !important;
-            display: block !important;
-            line-height: 1.5 !important;
-        `;
-        
-        // Crear rating
-        const rating = document.createElement('div');
-        rating.className = 'doctor-rating';
-        rating.textContent = doctor.rating;
-        rating.style.cssText = `
-            color: #d4af37 !important;
-            font-size: 1rem !important;
-            margin-top: 0.5rem !important;
-            display: block !important;
-        `;
-        
-        // Ensamblar estructura
-        info.appendChild(name);
-        info.appendChild(badge);
-        info.appendChild(experience);
-        info.appendChild(rating);
-        
-        card.appendChild(photo);
-        card.appendChild(info);
-        
-        // Agregar al contenedor
-        doctorSelection.appendChild(card);
-        
-        console.log(`✅ Doctor ${index + 1} creado: ${doctor.name}`);
-        console.log(`   Card height:`, card.offsetHeight, 'px');
     });
     
-    console.log('✅ Todos los doctores insertados en el DOM');
+    doctorSelection.innerHTML = doctorsHTML;
     
-    // Agregar efectos hover
+    console.log(`✅ ${doctors.length} doctores cargados en el DOM`);
+    
+    // Agregar event listeners a las tarjetas
     setTimeout(() => {
         const cards = doctorSelection.querySelectorAll('.doctor-card');
-        console.log(`🔍 Cards después de inserción:`, cards.length);
+        console.log(`✅ Tarjetas encontradas: ${cards.length}`);
         
-        cards.forEach((card, i) => {
-            console.log(`   Card ${i + 1} - Height: ${card.offsetHeight}px, Display: ${window.getComputedStyle(card).display}`);
-            
+        cards.forEach((card, index) => {
             card.addEventListener('mouseenter', function() {
                 this.style.borderColor = '#3da672';
                 this.style.transform = 'translateY(-5px)';
@@ -433,80 +315,48 @@ function loadDoctors() {
                 }
             });
         });
-        
-        // Verificación final
-        console.log('═══════════════════════════════════');
-        console.log('🔍 VERIFICACIÓN FINAL DE VISIBILIDAD:');
-        console.log('Contenedor height:', doctorSelection.offsetHeight, 'px');
-        console.log('Contenedor display:', window.getComputedStyle(doctorSelection).display);
-        console.log('Total de tarjetas:', cards.length);
-        
-        const allVisible = Array.from(cards).every(c => c.offsetHeight > 0);
-        if (allVisible) {
-            console.log('✅ ¡TODAS LAS TARJETAS SON VISIBLES!');
-        } else {
-            console.log('❌ ALGUNAS TARJETAS NO SON VISIBLES');
-            cards.forEach((c, i) => {
-                if (c.offsetHeight === 0) {
-                    console.log(`   ❌ Card ${i + 1} tiene height 0`);
-                }
-            });
-        }
-        console.log('═══════════════════════════════════');
-    }, 200);
+    }, 100);
 }
 
-// Función global para manejar clicks (llamada desde onclick)
-window.handleDoctorClick = function(index) {
-    console.log('🎯 ========================================');
-    console.log('🎯 CLICK DETECTADO VIA ONCLICK');
-    console.log('🎯 Index del doctor:', index);
+// ===== SELECCIONAR DOCTOR =====
+function selectDoctor(index) {
+    console.log(`👨‍⚕️ Seleccionando doctor en index ${index}`);
     
     const doctors = doctorsDatabase[appointmentData.specialty];
     
     if (!doctors || !doctors[index]) {
-        console.error('❌ Error: Doctor no encontrado en el index', index);
+        console.error('❌ Doctor no encontrado');
         return;
     }
     
     const doctor = doctors[index];
-    
-    console.log('👨‍⚕️ Doctor:', doctor.name);
+    const doctorSelection = document.getElementById('doctorSelection');
     
     // Remover selección anterior
-    const allCards = document.querySelectorAll('.doctor-card');
+    const allCards = doctorSelection.querySelectorAll('.doctor-card');
     allCards.forEach(card => {
         card.classList.remove('selected');
         card.style.borderColor = '#e0e0e0';
         card.style.background = 'white';
-        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = 'none';
     });
     
     // Seleccionar la tarjeta clickeada
-    const clickedCard = document.querySelector(`[data-doctor-index="${index}"]`);
-    if (clickedCard) {
-        clickedCard.classList.add('selected');
-        clickedCard.style.borderColor = '#2d8659';
-        clickedCard.style.borderWidth = '3px';
-        clickedCard.style.background = 'rgba(45, 134, 89, 0.05)';
-        clickedCard.style.transform = 'translateY(-5px)';
-        clickedCard.style.boxShadow = '0 8px 20px rgba(45, 134, 89, 0.2)';
-        console.log('✅ Clase "selected" agregada a la tarjeta');
-        console.log('✅ Estilos de selección aplicados');
-    } else {
-        console.error('❌ No se encontró la tarjeta clickeada');
+    const selectedCard = doctorSelection.querySelector(`[data-doctor-index="${index}"]`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected');
+        selectedCard.style.borderColor = '#2d8659';
+        selectedCard.style.borderWidth = '3px';
+        selectedCard.style.background = 'rgba(45, 134, 89, 0.05)';
+        selectedCard.style.transform = 'translateY(-5px)';
+        selectedCard.style.boxShadow = '0 8px 20px rgba(45, 134, 89, 0.2)';
     }
     
     // Guardar el doctor seleccionado
     appointmentData.doctor = doctor;
     
-    console.log('✅ ===== DOCTOR SELECCIONADO EXITOSAMENTE =====');
-    console.log('✅ Doctor guardado:', appointmentData.doctor.name);
-    console.log('📊 Estado actual:', appointmentData);
-    console.log('🎯 ========================================');
-    
-    return false; // Prevenir comportamiento default
-};
+    console.log('✅ Doctor seleccionado:', appointmentData.doctor.name);
+}
 
 // ===== CARGAR HORARIOS =====
 function loadTimeSlots(selectedDate) {
@@ -518,28 +368,27 @@ function loadTimeSlots(selectedDate) {
         return;
     }
     
-    // Simular horarios ocupados (aleatorio)
+    // Simular horarios ocupados
     const occupiedSlots = getRandomOccupiedSlots();
     
+    let slotsHTML = '';
     availableTimeSlots.forEach(time => {
-        const timeSlot = document.createElement('div');
-        timeSlot.className = 'time-slot';
-        timeSlot.textContent = time;
+        const isDisabled = occupiedSlots.includes(time);
+        const disabledClass = isDisabled ? 'disabled' : '';
         
-        if (occupiedSlots.includes(time)) {
-            timeSlot.classList.add('disabled');
-        } else {
-            timeSlot.addEventListener('click', function() {
-                selectTimeSlot(time, this);
-            });
-        }
-        
-        timeSlotsContainer.appendChild(timeSlot);
+        slotsHTML += `
+            <div class="time-slot ${disabledClass}" 
+                 ${!isDisabled ? `onclick="selectTimeSlot('${time}', this)"` : ''}>
+                ${time}
+            </div>
+        `;
     });
+    
+    timeSlotsContainer.innerHTML = slotsHTML;
 }
 
 function getRandomOccupiedSlots() {
-    const numOccupied = Math.floor(Math.random() * 5) + 3; // 3-7 horarios ocupados
+    const numOccupied = Math.floor(Math.random() * 5) + 3;
     const occupied = [];
     
     for (let i = 0; i < numOccupied; i++) {
@@ -563,37 +412,33 @@ function selectTimeSlot(time, element) {
     element.classList.add('selected');
     appointmentData.time = time;
     
-    console.log('Horario seleccionado:', time);
+    console.log('🕐 Horario seleccionado:', time);
 }
 
 // ===== NAVEGACIÓN DE PASOS =====
 function nextStep() {
-    console.log(`📍 Intentando avanzar desde paso ${currentStep}`);
+    console.log(`📍 Paso actual: ${currentStep}`);
     
-    // Validar paso actual antes de continuar
+    // Validar paso actual
     if (!validateStep(currentStep)) {
-        console.log('❌ Validación fallida en paso', currentStep);
+        console.log('❌ Validación fallida');
         return;
     }
     
     console.log('✅ Validación exitosa');
     
-    // Cargar contenido del siguiente paso si es necesario
+    // Cargar contenido del siguiente paso
     if (currentStep === 1) {
-        console.log('🔄 Cargando doctores...');
         loadDoctors();
     } else if (currentStep === 3) {
         appointmentData.date = document.getElementById('appointmentDate').value;
-        console.log('📅 Fecha seleccionada:', appointmentData.date);
     } else if (currentStep === 4) {
-        console.log('📝 Recopilando datos del paciente...');
         collectPatientData();
         showAppointmentSummary();
     }
     
     if (currentStep < totalSteps) {
         currentStep++;
-        console.log(`➡️ Avanzando a paso ${currentStep}`);
         updateStepDisplay();
     }
 }
@@ -644,54 +489,36 @@ function updateStepDisplay() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ===== VALIDACIÓN DE PASOS =====
+// ===== VALIDACIÓN =====
 function validateStep(step) {
-    console.log(`🔍 Validando paso ${step}...`);
-    
     switch(step) {
         case 1:
             if (!appointmentData.specialty) {
                 alert('⚠️ Por favor, seleccione una especialidad');
-                console.log('❌ Validación fallida: No hay especialidad seleccionada');
                 return false;
             }
-            console.log('✅ Paso 1 válido - Especialidad:', appointmentData.specialtyName);
             break;
             
         case 2:
-            console.log('🔍 Verificando doctor seleccionado...');
-            console.log('📊 Doctor actual:', appointmentData.doctor);
-            
             if (!appointmentData.doctor) {
                 alert('⚠️ Por favor, seleccione un profesional');
-                console.log('❌ Validación fallida: appointmentData.doctor es null o undefined');
-                console.log('💡 Sugerencia: Haga click en una de las tarjetas de doctores');
                 return false;
             }
-            console.log('✅ Paso 2 válido - Doctor:', appointmentData.doctor.name);
             break;
             
         case 3:
             const date = document.getElementById('appointmentDate').value;
-            console.log('🔍 Verificando fecha y hora...');
-            console.log('📅 Fecha:', date);
-            console.log('🕐 Hora:', appointmentData.time);
-            
             if (!date) {
                 alert('⚠️ Por favor, seleccione una fecha');
-                console.log('❌ Validación fallida: No hay fecha seleccionada');
                 return false;
             }
             if (!appointmentData.time) {
                 alert('⚠️ Por favor, seleccione un horario');
-                console.log('❌ Validación fallida: No hay horario seleccionado');
                 return false;
             }
-            console.log('✅ Paso 3 válido');
             break;
             
         case 4:
-            console.log('🔍 Verificando datos personales...');
             return validatePersonalData();
     }
     return true;
@@ -739,7 +566,6 @@ function validatePersonalData() {
 }
 
 function validateRUT(rut) {
-    // Validación básica de RUT chileno
     const rutPattern = /^[0-9]+[-|‐]{1}[0-9kK]{1}$/;
     return rutPattern.test(rut);
 }
@@ -808,24 +634,15 @@ function showAppointmentSummary() {
 function submitAppointment(e) {
     e.preventDefault();
     
-    // Generar número de cita único
     const appointmentNumber = generateAppointmentNumber();
     appointmentData.appointmentNumber = appointmentNumber;
     
-    // Mostrar loading
     showLoading();
     
-    // Simular procesamiento
     setTimeout(() => {
         hideLoading();
-        
-        // Generar y mostrar voucher
         generateVoucher();
-        
-        // Simular envío de email
         sendConfirmationEmail();
-        
-        // Mostrar mensaje de éxito
         showSuccessMessage();
     }, 2000);
 }
@@ -917,31 +734,9 @@ function generateVoucher() {
     document.getElementById('voucherModal').classList.add('active');
 }
 
-// ===== SIMULACIÓN DE ENVÍO DE EMAIL =====
+// ===== ENVÍO DE EMAIL =====
 function sendConfirmationEmail() {
-    console.log('📧 SIMULACIÓN DE ENVÍO DE EMAIL');
-    console.log('═══════════════════════════════════════');
-    console.log(`Para: ${appointmentData.patient.email}`);
-    console.log(`Asunto: Confirmación de Cita Médica - ${appointmentData.appointmentNumber}`);
-    console.log('─────────────────────────────────────');
-    console.log(`Estimado/a ${appointmentData.patient.name},`);
-    console.log('');
-    console.log('Su cita médica ha sido confirmada exitosamente:');
-    console.log('');
-    console.log(`• Número de Cita: ${appointmentData.appointmentNumber}`);
-    console.log(`• Especialidad: ${appointmentData.specialtyName}`);
-    console.log(`• Profesional: ${appointmentData.doctor.name}`);
-    console.log(`• Fecha: ${appointmentData.date}`);
-    console.log(`• Hora: ${appointmentData.time}`);
-    console.log('');
-    console.log('Adjunto encontrará su comprobante de cita.');
-    console.log('');
-    console.log('Saludos cordiales,');
-    console.log('Clínica de Carabineros');
-    console.log('═══════════════════════════════════════');
-    
-    // En producción real, aquí se haría la llamada al backend
-    // fetch('/api/send-email', { method: 'POST', body: JSON.stringify(appointmentData) })
+    console.log('📧 Confirmación de cita enviada a:', appointmentData.patient.email);
 }
 
 // ===== FUNCIONES DE VOUCHER =====
@@ -950,18 +745,12 @@ function printVoucher() {
 }
 
 function downloadVoucher() {
-    // Simular descarga de PDF
-    alert('En un sistema real, aquí se generaría y descargaría el voucher en formato PDF.\n\nPor ahora puede imprimir el voucher usando el botón "Imprimir".');
-    
-    // En producción real, se usaría una librería como jsPDF o html2pdf
-    // const element = document.getElementById('voucherToPrint');
-    // html2pdf().from(element).save(`cita-${appointmentData.appointmentNumber}.pdf`);
+    alert('En un sistema real, aquí se generaría y descargaría el voucher en formato PDF.');
 }
 
 function closeVoucherModal() {
     document.getElementById('voucherModal').classList.remove('active');
     
-    // Preguntar si desea agendar otra cita
     setTimeout(() => {
         if (confirm('¿Desea agendar otra cita?')) {
             location.reload();
@@ -994,7 +783,6 @@ function showLoading() {
                 border-radius: 16px;
                 text-align: center;
             ">
-                <div class="page-loader" style="position: relative; margin-bottom: 1rem;"></div>
                 <p style="font-size: 1.2rem; font-weight: 600;">Procesando su cita...</p>
             </div>
         </div>
@@ -1035,280 +823,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-console.log('✅ Sistema de agendamiento de citas cargado correctamente');
-
-// ===== FUNCIÓN DE TEST PARA DEBUGGING =====
-window.testDoctorSystem = function() {
-    console.log('🧪 ===== INICIANDO TEST DEL SISTEMA DE DOCTORES =====');
-    console.log('');
-    
-    console.log('1️⃣ Verificando base de datos de doctores...');
-    console.log('   Total de especialidades:', Object.keys(doctorsDatabase).length);
-    console.log('   Especialidades disponibles:', Object.keys(doctorsDatabase));
-    console.log('');
-    
-    console.log('2️⃣ Verificando especialidad seleccionada...');
-    console.log('   Especialidad actual:', appointmentData.specialty || 'NINGUNA');
-    console.log('   Nombre especialidad:', appointmentData.specialtyName || 'NINGUNA');
-    console.log('');
-    
-    if (appointmentData.specialty) {
-        const doctors = doctorsDatabase[appointmentData.specialty];
-        console.log('3️⃣ Doctores disponibles para esta especialidad:');
-        console.log('   Cantidad:', doctors ? doctors.length : 0);
-        if (doctors) {
-            doctors.forEach((doc, i) => {
-                console.log(`   ${i + 1}. ${doc.name} (ID: ${doc.id})`);
-            });
-        }
-    } else {
-        console.log('⚠️  No hay especialidad seleccionada aún');
-    }
-    console.log('');
-    
-    console.log('4️⃣ Verificando doctor seleccionado...');
-    console.log('   Doctor actual:', appointmentData.doctor ? appointmentData.doctor.name : 'NINGUNO');
-    console.log('');
-    
-    console.log('5️⃣ Verificando tarjetas de doctores en el DOM...');
-    const cards = document.querySelectorAll('.doctor-card');
-    console.log('   Tarjetas encontradas:', cards.length);
-    cards.forEach((card, i) => {
-        const isSelected = card.classList.contains('selected');
-        const doctorIndex = card.getAttribute('data-doctor-index');
-        console.log(`   Tarjeta ${i + 1}: Index=${doctorIndex} ${isSelected ? '✅ SELECCIONADA' : ''}`);
-    });
-    console.log('');
-    
-    console.log('6️⃣ Verificando contenedor de doctores...');
-    const container = document.getElementById('doctorSelection');
-    if (container) {
-        console.log('   ✅ Contenedor encontrado');
-        console.log('   Hijos directos:', container.children.length);
-    } else {
-        console.log('   ❌ Contenedor NO encontrado');
-    }
-    console.log('');
-    
-    console.log('7️⃣ Estado completo del agendamiento:');
-    console.log(appointmentData);
-    console.log('');
-    
-    console.log('🧪 ===== TEST COMPLETADO =====');
-    console.log('');
-    console.log('💡 INSTRUCCIONES:');
-    console.log('   - Si no ves doctores, asegúrate de estar en el Paso 2');
-    console.log('   - Haz click DIRECTAMENTE en cualquier tarjeta de doctor');
-    console.log('   - Deberías ver: 🎯 CLICK DETECTADO EN CONTENEDOR PADRE');
-    console.log('   - Luego: ✅ Tarjeta de doctor encontrada');
-    console.log('');
-    console.log('🔧 PRUEBA MANUAL:');
-    console.log('   Ejecuta: document.getElementById("doctorSelection").click()');
-    console.log('   Deberías ver el mensaje de click detectado');
-};
-
-// ===== FUNCIÓN DE TEST DE CLICK =====
-window.testDoctorClick = function() {
-    console.log('🧪 ===== TEST DE CLICK EN DOCTORES =====');
-    const container = document.getElementById('doctorSelection');
-    if (!container) {
-        console.log('❌ Contenedor no encontrado. ¿Estás en el paso 2?');
-        return;
-    }
-    
-    const cards = container.querySelectorAll('.doctor-card');
-    console.log(`📋 Encontradas ${cards.length} tarjetas`);
-    
-    if (cards.length === 0) {
-        console.log('❌ No hay tarjetas. Ejecuta loadDoctors() primero');
-        return;
-    }
-    
-    console.log('🖱️ Simulando click en la primera tarjeta...');
-    console.log('💡 Llamando a handleDoctorClick(0)...');
-    
-    handleDoctorClick(0);
-    
-    setTimeout(() => {
-        if (appointmentData.doctor) {
-            console.log('✅ ¡ÉXITO! Doctor seleccionado:', appointmentData.doctor.name);
-            console.log('✅ Estado:', appointmentData);
-        } else {
-            console.log('❌ FALLO: El doctor no se seleccionó');
-            console.log('💡 Verifica la consola para ver si hay errores');
-        }
-    }, 500);
-};
-
-console.log('💡 TIP: Escribe testDoctorSystem() en la consola para ejecutar un test completo');
-console.log('💡 TIP: Escribe testDoctorClick() para simular un click en un doctor');
-console.log('');
-
-// ===== FUNCIÓN DE DEBUG PARA VER HTML =====
-window.debugDoctors = function() {
-    console.log('🔍 ===== DEBUG DE DOCTORES =====');
-    
-    const container = document.getElementById('doctorSelection');
-    console.log('1. Contenedor existe:', !!container);
-    
-    if (!container) {
-        console.error('❌ Contenedor #doctorSelection NO EXISTE en el DOM');
-        console.log('💡 Verifica que estés en el paso 2');
-        return;
-    }
-    
-    console.log('2. Contenedor encontrado:', container);
-    console.log('3. HTML del contenedor:');
-    console.log(container.innerHTML);
-    console.log('');
-    
-    console.log('4. Hijos del contenedor:', container.children.length);
-    console.log('5. Tarjetas .doctor-card:', container.querySelectorAll('.doctor-card').length);
-    console.log('');
-    
-    const cards = container.querySelectorAll('.doctor-card');
-    if (cards.length > 0) {
-        console.log('✅ SE ENCONTRARON', cards.length, 'TARJETAS');
-        cards.forEach((card, i) => {
-            console.log(`   Tarjeta ${i + 1}:`, card);
-            console.log(`   Visible:`, card.offsetHeight > 0);
-            console.log(`   Display:`, window.getComputedStyle(card).display);
-        });
-    } else {
-        console.log('❌ NO SE ENCONTRARON TARJETAS');
-        console.log('💡 Ejecuta: loadDoctors()');
-    }
-    
-    console.log('');
-    console.log('6. Especialidad actual:', appointmentData.specialty);
-    console.log('7. Doctores en DB:', doctorsDatabase[appointmentData.specialty]?.length || 0);
-    console.log('');
-    console.log('🔍 ===== FIN DEBUG =====');
-    console.log('');
-    console.log('💡 Si ves tarjetas pero no son visibles, es un problema de CSS');
-    console.log('💡 Si no ves tarjetas, ejecuta: loadDoctors()');
-};
-
-console.log('💡 NUEVO: Escribe debugDoctors() para ver el HTML completo');
-
-// ===== FUNCIÓN DE DIAGNÓSTICO COMPLETO =====
-window.diagnosticoCompleto = function() {
-    console.log('🔬 ═══════════════════════════════════════════════');
-    console.log('🔬 DIAGNÓSTICO COMPLETO DEL SISTEMA');
-    console.log('🔬 ═══════════════════════════════════════════════');
-    console.log('');
-    
-    // 1. Verificar paso actual
-    console.log('1️⃣ PASO ACTUAL:');
-    const activeStep = document.querySelector('.form-step.active');
-    console.log('   Paso activo:', activeStep ? activeStep.dataset.step : 'NINGUNO');
-    console.log('');
-    
-    // 2. Verificar contenedor
-    console.log('2️⃣ CONTENEDOR:');
-    const container = document.getElementById('doctorSelection');
-    if (container) {
-        console.log('   ✅ Existe');
-        console.log('   Display:', window.getComputedStyle(container).display);
-        console.log('   Width:', container.offsetWidth, 'px');
-        console.log('   Height:', container.offsetHeight, 'px');
-        console.log('   Visible:', container.offsetHeight > 0);
-    } else {
-        console.log('   ❌ NO EXISTE');
-    }
-    console.log('');
-    
-    // 3. Verificar especialidad
-    console.log('3️⃣ ESPECIALIDAD:');
-    console.log('   Código:', appointmentData.specialty || 'NINGUNA');
-    console.log('   Nombre:', appointmentData.specialtyName || 'NINGUNA');
-    console.log('');
-    
-    // 4. Verificar doctores en BD
-    console.log('4️⃣ BASE DE DATOS:');
-    if (appointmentData.specialty) {
-        const docs = doctorsDatabase[appointmentData.specialty];
-        console.log('   Doctores disponibles:', docs ? docs.length : 0);
-        if (docs) {
-            docs.forEach((d, i) => console.log(`      ${i + 1}. ${d.name}`));
-        }
-    } else {
-        console.log('   ⚠️ No hay especialidad seleccionada');
-    }
-    console.log('');
-    
-    // 5. Verificar tarjetas en DOM
-    console.log('5️⃣ TARJETAS EN DOM:');
-    const cards = document.querySelectorAll('.doctor-card');
-    console.log('   Total encontradas:', cards.length);
-    if (cards.length > 0) {
-        cards.forEach((card, i) => {
-            const height = card.offsetHeight;
-            const display = window.getComputedStyle(card).display;
-            const visibility = window.getComputedStyle(card).visibility;
-            const opacity = window.getComputedStyle(card).opacity;
-            
-            console.log(`   Card ${i + 1}:`);
-            console.log(`      Height: ${height}px ${height > 0 ? '✅' : '❌'}`);
-            console.log(`      Display: ${display}`);
-            console.log(`      Visibility: ${visibility}`);
-            console.log(`      Opacity: ${opacity}`);
-        });
-    } else {
-        console.log('   ❌ NO HAY TARJETAS');
-    }
-    console.log('');
-    
-    // 6. Verificar archivos CSS cargados
-    console.log('6️⃣ ARCHIVOS CSS:');
-    const sheets = Array.from(document.styleSheets);
-    sheets.forEach((sheet, i) => {
-        try {
-            console.log(`   ${i + 1}. ${sheet.href || 'Inline CSS'}`);
-        } catch (e) {
-            console.log(`   ${i + 1}. [CORS blocked]`);
-        }
-    });
-    console.log('');
-    
-    // 7. Verificar archivos JS cargados
-    console.log('7️⃣ ARCHIVOS JAVASCRIPT:');
-    const scripts = Array.from(document.querySelectorAll('script[src]'));
-    scripts.forEach((script, i) => {
-        console.log(`   ${i + 1}. ${script.src}`);
-    });
-    console.log('');
-    
-    // 8. Test visual
-    console.log('8️⃣ TEST VISUAL:');
-    if (container && cards.length === 0) {
-        console.log('   ⚠️ Contenedor existe pero NO hay tarjetas');
-        console.log('   💡 Solución: Ejecuta loadDoctors()');
-    } else if (container && cards.length > 0) {
-        const allVisible = Array.from(cards).every(c => c.offsetHeight > 0);
-        if (allVisible) {
-            console.log('   ✅ TODAS las tarjetas deberían ser VISIBLES');
-        } else {
-            console.log('   ❌ PROBLEMA: Hay tarjetas con height 0');
-            console.log('   💡 Las tarjetas están en el DOM pero colapsadas');
-        }
-    }
-    console.log('');
-    
-    console.log('🔬 ═══════════════════════════════════════════════');
-    console.log('🔬 FIN DEL DIAGNÓSTICO');
-    console.log('🔬 ═══════════════════════════════════════════════');
-    console.log('');
-    console.log('💡 COMANDOS DISPONIBLES:');
-    console.log('   loadDoctors()          - Recargar doctores');
-    console.log('   testDoctorClick()      - Probar selección');
-    console.log('   diagnosticoCompleto()  - Este diagnóstico');
-    console.log('');
-};
-
-console.log('');
-console.log('═══════════════════════════════════════════════════════');
-console.log('💡 NUEVO COMANDO: diagnosticoCompleto()');
-console.log('   Ejecuta un análisis completo del sistema');
-console.log('═══════════════════════════════════════════════════════');
-console.log('');
+console.log('✅ Sistema de agendamiento cargado correctamente');
